@@ -9,43 +9,45 @@
 #include "func.h"
 
 int main() {
-    stampaMenùPrincipale();
     unsigned int richiesta; // numero di richiesta
-    scanf("%u", &richiesta);
 
     // elabora la richiesta dell'utente
-    while (richiesta != 7)
+    while ((richiesta = menùPrincipale()) != 7)
     {
         switch (richiesta)
         {
         case 1:
-            puts("Aggiunto nuovo conto!\n");
+            // Aggiungi nuovo conto
+            puts("\nAggiunto nuovo conto!");
             break;
         case 2:
-            puts("Visualizzato elenco conti!\n");
+            // Visualizza elenco conti
+            puts("\nVisualizzato elenco conti!");
             break;
         case 3:
-            puts("Conto modificato!\n");
+            // Modifica conto
+            puts("\nConto modificato!");
             break;
         case 4:
-            puts("Transazione avvenuta!\n");
+            // Transazione
+            puts("\nTransazione avvenuta!");
             break;
         case 5:
-            puts("Account eliminato!\n");
+            // Elimina account
+            puts("\nAccount eliminato!");
             break;
         case 6:
-            puts("Ecco i dettagli del conto!\n");
+            // Vedi dettagli conto
+            puts("\nEcco i dettagli del conto!");
             break;
         default:
-            puts("ERRORE: Scegli un'opzione dal menù.\n");
+            // scelta non valida
+            puts("\nERRORE: Scegli un'opzione dal menù.");
             break;
-        }
-
-        stampaMenùPrincipale();
-        scanf("%u", &richiesta);    
+        }    
     }
 
-    puts("Uscita dall'applicazione.");
+    puts("\nUscita dall'applicazione.");
     
     return 0;
 }

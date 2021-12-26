@@ -8,9 +8,9 @@
 #include "func.h"
 #include <stdio.h>
 
-void stampaMenùPrincipale() {
+unsigned int menùPrincipale() {
     // stampa le opzioni di richiesta
-    printf("%s", "Inserisci richiesta\n"
+    printf("%s", "\nInserisci richiesta\n"
         " 1 - Aggiungi nuovo conto\n"
         " 2 - Visualizza elenco conti\n"
         " 3 - Modifica conto\n"
@@ -18,4 +18,8 @@ void stampaMenùPrincipale() {
         " 5 - Elimina account\n"
         " 6 - Vedi dettagli conto\n"
         " 7 - Uscita\n? ");
+    
+    unsigned int sceltaMenù;
+    scanf("%u", &sceltaMenù);
+    return sceltaMenù;
 }

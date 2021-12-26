@@ -18,14 +18,14 @@ typedef struct {
 } Data;
 
 // definizione dell'enum TipoConto dei vari tipi di conto
-typedef enum { risparmio, corrente, fisso1Anno, fisso2Anni, fisso3Anni} TipoConto;
+typedef enum { risparmio, corrente, fisso1Anno, fisso2Anni, fisso3Anni } TipoConto;
 
 // definizione della struct DatiAccount dei dati di ogni account
 typedef struct {
     char nome[25];
     Data dataNascita;
     char codiceFiscale[16];
-    char indirizzoResidenza[20];
+    char indirizzoResidenza[25];
     int telefono[15];
     double saldo;
     TipoConto tipoConto;
@@ -34,6 +34,6 @@ typedef struct {
     double importoInteressi;
 } DatiAccount;
 
-void stampaMenùPrincipale();
+unsigned int menùPrincipale();
 
 #endif
