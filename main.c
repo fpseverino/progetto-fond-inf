@@ -80,7 +80,7 @@ int main() {
         scanf("%u", &richiesta);    
     }
 
-    puts("Fine.");
+    puts("Chiusura programma.");
     
     return 0;
 }
