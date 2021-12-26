@@ -51,10 +51,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Xcode
-.DS_Store
-
 # Test
 *
 !*.*
 !*/
+
+# Xcode
+.DS_Store
