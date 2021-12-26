@@ -22,8 +22,7 @@ typedef enum { risparmio, corrente, fisso1Anno, fisso2Anni, fisso3Anni} TipoCont
 
 // definizione della struct DatiAccount dei dati di ogni account
 typedef struct {
-    char nome[10];
-    char cognome[15];
+    char nome[25];
     Data dataNascita;
     char codiceFiscale[16];
     char indirizzoResidenza[20];
