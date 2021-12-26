@@ -53,3 +53,8 @@ dkms.conf
 
 # Xcode
 .DS_Store
+
+# Test
+*
+!*.*
+!*/
