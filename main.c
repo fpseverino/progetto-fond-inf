@@ -6,42 +6,7 @@
 //
 
 #include <stdio.h>
-
-//  definizione della struct Data per la gestione delle date
-struct DATA {
-    unsigned int giorno;
-    unsigned int mese;
-    unsigned int anno;
-};
-typedef struct DATA Data;
-
-// definizione dell'enum TipoConto dei vari tipi di conto
-enum TIPO_CONTO {
-    risparmio,
-    corrente,
-    fisso1Anno,
-    fisso2Anni,
-    fisso3Anni,
-};
-typedef enum TIPO_CONTO TipoConto;
-
-// definizione della struct DatiAccount dei dati di ogni account
-struct DATI_ACCOUNT {
-    char nome[10];
-    char cognome[15];
-    Data dataNascita;
-    char codiceFiscale[16];
-    char indirizzoResidenza[20];
-    int telefono[15];
-    double saldo;
-    TipoConto tipoConto;
-    unsigned int numeroConto;
-    Data dataVersamento;
-    double importoInteressi;
-};
-typedef struct DATI_ACCOUNT DatiAccount;
-
-void stampaMenùPrincipale();
+#include "func.h"
 
 int main() {
     stampaMenùPrincipale();
@@ -72,7 +37,7 @@ int main() {
             puts("Ecco i dettagli del conto!\n");
             break;
         default:
-            puts("ERRORE\n");
+            puts("ERRORE: Scegli un'opzione dal menù.\n");
             break;
         }
 
@@ -80,19 +45,7 @@ int main() {
         scanf("%u", &richiesta);    
     }
 
-    puts("Chiusura programma.");
+    puts("Uscita dall'applicazione.");
     
     return 0;
-}
-
-void stampaMenùPrincipale() {
-    // stampa le opzioni di richiesta
-    printf("%s", "Inserisci richiesta\n"
-        " 1 - Aggiungi nuovo conto\n"
-        " 2 - Visualizza elenco conti\n"
-        " 3 - Modifica conto\n"
-        " 4 - Transazione\n"
-        " 5 - Elimina account\n"
-        " 6 - Vedi dettagli conto\n"
-        " 7 - Uscita\n? ");
 }
