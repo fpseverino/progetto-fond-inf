@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 
+// struct per la gestione delle date
 struct DATA {
     unsigned int giorno;
     unsigned int mese;
@@ -14,6 +15,7 @@ struct DATA {
 };
 typedef struct DATA Data;
 
+// enum dei tipi di conto
 enum TIPO_CONTO {
     risparmio,
     corrente,
@@ -23,6 +25,7 @@ enum TIPO_CONTO {
 };
 typedef enum TIPO_CONTO TipoConto;
 
+// struct dei dati di ogni account
 struct DATI_ACCOUNT {
     char nome[10];
     char cognome[15];
