@@ -58,3 +58,6 @@ dkms.conf
 
 # Xcode
 .DS_Store
+
+# Program created files
+*.dat
