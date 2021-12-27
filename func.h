@@ -24,7 +24,7 @@ typedef enum { risparmio, corrente, fisso1Anno, fisso2Anni, fisso3Anni } TIPO_CO
 typedef struct {
     char nome[25];
     Data dataNascita;
-    char codiceFiscale[16];
+    char codiceFiscale[17];
     char indirizzoResidenza[25];
     int telefono;
     double saldo;
@@ -35,5 +35,7 @@ typedef struct {
 } DatiAccount;
 
 unsigned int menùPrincipale();
+void aggiungiNuovoConto(FILE *pFile);
+void vediDettagliConto(FILE *pFile);
 
 #endif

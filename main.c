@@ -9,9 +9,9 @@
 #include "func.h"
 
 int main() {
-    FILE *pFile; // puntatore al file accounts.dat
+    FILE *pAccountFile; // puntatore al file accounts.dat
     // fopen apre il file per la scrittura in forma binaria
-    if ((pFile = fopen("accounts.dat", "wb")) == NULL) {
+    if ((pAccountFile = fopen("accounts.dat", "wb")) == NULL) {
         puts("Il file non può essere aperto.");
     } else {
         // crea DatiAccount con informazioni predefinite
@@ -29,13 +29,13 @@ int main() {
         };
         // scrive 100 record vuoti su file
         for (int i = 1; i <= 100; i++) {
-            fwrite(&accountVuoto, sizeof(DatiAccount), 1, pFile);
+            fwrite(&accountVuoto, sizeof(DatiAccount), 1, pAccountFile);
         }
-        fclose(pFile); // fclose chiude il file
+        fclose(pAccountFile); // fclose chiude il file
     }
 
     // fopen apre il file per l'aggiornamento in forma binaria
-    if ((pFile = fopen("accounts.dat", "rb+")) == NULL) {
+    if ((pAccountFile = fopen("accounts.dat", "rb+")) == NULL) {
         puts("Il file non può essere aperto.");
     } else {
         unsigned int scelta; // scelta dell'utente
@@ -44,6 +44,7 @@ int main() {
             switch (scelta) {
                 case 1:
                     // Aggiungi nuovo conto
+                    aggiungiNuovoConto(pAccountFile);
                     puts("\nAggiunto nuovo conto!");
                     break;
                 case 2:
@@ -64,7 +65,7 @@ int main() {
                     break;
                 case 6:
                     // Vedi dettagli conto
-                    puts("\nEcco i dettagli del conto!");
+                    vediDettagliConto(pAccountFile);
                     break;
                 default:
                     // scelta non valida
@@ -72,9 +73,8 @@ int main() {
                     break;
             }    
         }
-        fclose(pFile); // fclose chiude il file
+        fclose(pAccountFile); // fclose chiude il file
         puts("\nUscita dall'applicazione.");
     }
-    
     return 0;
 }
