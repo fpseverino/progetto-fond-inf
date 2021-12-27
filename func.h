@@ -10,25 +10,25 @@
 
 #include <stdio.h>
 
-//  definizione della struct Data per la gestione delle date
+//  definizione della struttura Data per la gestione delle date
 typedef struct {
     unsigned int giorno;
     unsigned int mese;
     unsigned int anno;
 } Data;
 
-// definizione dell'enum TipoConto dei vari tipi di conto
-typedef enum { risparmio, corrente, fisso1Anno, fisso2Anni, fisso3Anni } TipoConto;
+// definizione dell'enumerazione TipoConto dei vari tipi di conto
+typedef enum { risparmio, corrente, fisso1Anno, fisso2Anni, fisso3Anni } TIPO_CONTO;
 
-// definizione della struct DatiAccount dei dati di ogni account
+// definizione della struttura DatiAccount dei dati di ogni account
 typedef struct {
     char nome[25];
     Data dataNascita;
     char codiceFiscale[16];
     char indirizzoResidenza[25];
-    int telefono[15];
+    int telefono;
     double saldo;
-    TipoConto tipoConto;
+    TIPO_CONTO tipoConto;
     unsigned int numeroConto;
     Data dataVersamento;
     double importoInteressi;
