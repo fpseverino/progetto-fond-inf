@@ -32,10 +32,12 @@ int main() {
                 {0, 0, 0},
                 0.0
             };
+
             // scrive 100 record vuoti sul file
             for (int i = 1; i <= 100; i++) {
                 fwrite(&accountVuoto, sizeof(DatiAccount), 1, pAccountFile);
             }
+
             fclose(pAccountFile); // fclose chiude il file
         }
     }
@@ -54,19 +56,19 @@ int main() {
                     break;
                 case 2:
                     // Visualizza elenco conti
-                    puts("\nVisualizzato elenco conti!");
+                    puts("\nVisualizzato elenco conti!\n");
                     break;
                 case 3:
                     // Modifica conto
-                    puts("\nConto modificato!");
+                    puts("\nConto modificato!\n");
                     break;
                 case 4:
                     // Transazione
-                    puts("\nTransazione avvenuta!");
+                    puts("\nTransazione avvenuta!\n");
                     break;
                 case 5:
                     // Elimina account
-                    puts("\nAccount eliminato!");
+                    puts("\nAccount eliminato!\n");
                     break;
                 case 6:
                     // Vedi dettagli conto
@@ -74,7 +76,7 @@ int main() {
                     break;
                 default:
                     // scelta non valida
-                    puts("\nERRORE: Scegli un'opzione dal menù.");
+                    puts("\nERRORE: Scegli un'opzione dal menù.\n");
                     break;
             }    
         }

@@ -9,7 +9,6 @@
 #include <stdio.h>
 
 unsigned int menùPrincipale() {
-    // stampa le opzioni di richiesta
     printf("%s", "MENU PRINCIPALE\n"
         " 1 - Aggiungi nuovo conto\n"
         " 2 - Visualizza elenco conti\n"
@@ -26,13 +25,14 @@ unsigned int menùPrincipale() {
 }
 
 void aggiungiNuovoConto(FILE *pFile) {
-    // ottieni il numero del conto da creare
     printf("%s", "\nInserisci il numero del nuovo account (1 - 100): ");
     unsigned int numeroAccount; // numero del conto
     scanf("%u", &numeroAccount);
     fflush(stdin);
+
     // sposta il puntatore del file al record corretto nel file
     fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+
     // crea DatiAccount con informazioni predefinite
     DatiAccount account = {
         "",
@@ -46,11 +46,13 @@ void aggiungiNuovoConto(FILE *pFile) {
         {0, 0, 0},
         0.0
     };
+
     // leggi il record dal file
     fread(&account, sizeof(DatiAccount), 1, pFile);
+
     // stampa un messaggio di errore se il conto esiste già
     if (account.numeroConto != 0) {
-        printf(" L'account #%u contiene già informazioni.\n", account.numeroConto);
+        printf(" L'account #%u contiene già informazioni.\n\n", account.numeroConto);
     } else /* crea il record */ {
         // l'utente inserisce i dati
         printf("%s", "Inserisci nome e cognome\n? ");
@@ -98,17 +100,18 @@ void aggiungiNuovoConto(FILE *pFile) {
         // inserisci il record nel file
         fwrite(&account, sizeof(DatiAccount), 1, pFile);
 
-        puts(" Nuovo conto aggiunto.");
+        puts(" Nuovo conto aggiunto.\n");
     }
 }
 
 void vediDettagliConto(FILE *pFile) {
-    // ottieni il numero del conto da visionare
     printf("%s", "\nInserisci il numero dell'account da visionare (1 - 100): ");
     unsigned int numeroAccount; // numero del conto
     scanf("%u", &numeroAccount);
+
     // sposta il puntatore del file al record corretto nel file
     fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+
     // crea DatiAccount con informazioni predefinite
     DatiAccount account = {
         "",
@@ -122,11 +125,13 @@ void vediDettagliConto(FILE *pFile) {
         {0, 0, 0},
         0.0
     };
+
     // leggi il record dal file
     fread(&account, sizeof(DatiAccount), 1, pFile);
+
     // stampa un messaggio di errore se il conto non esiste
     if (account.numeroConto == 0) {
-        printf(" L'account #%u non contiene informazioni.\n", numeroAccount);
+        printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* stampa i dettagli dell'account */ {
         printf(" Nome: %s\n", account.nome);
         printf(" Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
@@ -137,5 +142,6 @@ void vediDettagliConto(FILE *pFile) {
         printf(" Tipo di conto: %d\n", account.tipoConto);
         printf(" Numero del conto: %u\n", account.numeroConto);
         printf(" Data ultimo versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
+        puts("");
     }
 }
