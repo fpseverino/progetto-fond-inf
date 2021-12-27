@@ -56,5 +56,9 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Program created files
+*.dat
+*.txt
+
 # Xcode
 .DS_Store
