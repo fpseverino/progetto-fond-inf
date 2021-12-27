@@ -51,7 +51,6 @@ int main() {
                 case 1:
                     // Aggiungi nuovo conto
                     aggiungiNuovoConto(pAccountFile);
-                    puts("\nAggiunto nuovo conto!");
                     break;
                 case 2:
                     // Visualizza elenco conti

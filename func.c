@@ -10,7 +10,7 @@
 
 unsigned int menùPrincipale() {
     // stampa le opzioni di richiesta
-    printf("%s", "\nInserisci richiesta\n"
+    printf("%s", "MENU PRINCIPALE\n"
         " 1 - Aggiungi nuovo conto\n"
         " 2 - Visualizza elenco conti\n"
         " 3 - Modifica conto\n"
@@ -27,7 +27,7 @@ unsigned int menùPrincipale() {
 
 void aggiungiNuovoConto(FILE *pFile) {
     // ottieni il numero del conto da creare
-    printf("%s", "Inserisci il numero del nuovo account (1 - 100): ");
+    printf("%s", "\nInserisci il numero del nuovo account (1 - 100): ");
     unsigned int numeroAccount; // numero del conto
     scanf("%u", &numeroAccount);
     fflush(stdin);
@@ -50,7 +50,7 @@ void aggiungiNuovoConto(FILE *pFile) {
     fread(&account, sizeof(DatiAccount), 1, pFile);
     // stampa un messaggio di errore se il conto esiste già
     if (account.numeroConto != 0) {
-        printf("L'account #%u contiene già informazioni.\n", account.numeroConto);
+        printf(" L'account #%u contiene già informazioni.\n", account.numeroConto);
     } else /* crea il record */ {
         // l'utente inserisce i dati
         printf("%s", "Inserisci nome e cognome\n? ");
@@ -97,12 +97,14 @@ void aggiungiNuovoConto(FILE *pFile) {
 
         // inserisci il record nel file
         fwrite(&account, sizeof(DatiAccount), 1, pFile);
+
+        puts(" Nuovo conto aggiunto.");
     }
 }
 
 void vediDettagliConto(FILE *pFile) {
     // ottieni il numero del conto da visionare
-    printf("%s", "Inserisci il numero dell'account da visionare (1 - 100): ");
+    printf("%s", "\nInserisci il numero dell'account da visionare (1 - 100): ");
     unsigned int numeroAccount; // numero del conto
     scanf("%u", &numeroAccount);
     // sposta il puntatore del file al record corretto nel file
@@ -124,16 +126,16 @@ void vediDettagliConto(FILE *pFile) {
     fread(&account, sizeof(DatiAccount), 1, pFile);
     // stampa un messaggio di errore se il conto non esiste
     if (account.numeroConto == 0) {
-        printf("L'account #%u non contiene informazioni.\n", numeroAccount);
+        printf(" L'account #%u non contiene informazioni.\n", numeroAccount);
     } else /* stampa i dettagli dell'account */ {
-        printf("Nome: %s\n", account.nome);
-        printf("Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
-        printf("Codice fiscale: %s\n", account.codiceFiscale);
-        printf("Indirizzo di residenza: %s\n", account.indirizzoResidenza);
-        printf("Telefono: %d\n", account.telefono);
-        printf("Saldo: %.2lf\n", account.saldo);
-        printf("Tipo di conto: %d\n", account.tipoConto);
-        printf("Numero del conto: %u\n", account.numeroConto);
-        printf("Data ultimo versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
+        printf(" Nome: %s\n", account.nome);
+        printf(" Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
+        printf(" Codice fiscale: %s\n", account.codiceFiscale);
+        printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
+        printf(" Telefono: %d\n", account.telefono);
+        printf(" Saldo: %.2lf\n", account.saldo);
+        printf(" Tipo di conto: %d\n", account.tipoConto);
+        printf(" Numero del conto: %u\n", account.numeroConto);
+        printf(" Data ultimo versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
     }
 }
