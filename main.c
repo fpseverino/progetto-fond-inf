@@ -10,28 +10,34 @@
 
 int main() {
     FILE *pAccountFile; // puntatore al file accounts.dat
-    // fopen apre il file per la scrittura in forma binaria
-    if ((pAccountFile = fopen("accounts.dat", "wb")) == NULL) {
-        puts("Il file non può essere aperto.");
-    } else {
-        // crea DatiAccount con informazioni predefinite
-        DatiAccount accountVuoto = {
-            "",
-            {0, 0, 0},
-            "",
-            "",
-            0,
-            0.0,
-            0,
-            0,
-            {0, 0, 0},
-            0.0
-        };
-        // scrive 100 record vuoti su file
-        for (int i = 1; i <= 100; i++) {
-            fwrite(&accountVuoto, sizeof(DatiAccount), 1, pAccountFile);
+
+    if ((pAccountFile = fopen("accounts.dat", "rb")) == NULL) {
+        // il file non esiste e deve essere creato
+        fclose(pAccountFile);
+
+        // crea il file
+        if ((pAccountFile = fopen("accounts.dat", "wb")) == NULL) {
+            puts("Il file non può essere aperto.");
+        } else {
+            // crea DatiAccount con informazioni predefinite
+            DatiAccount accountVuoto = {
+                "",
+                {0, 0, 0},
+                "",
+                "",
+                0,
+                0.0,
+                0,
+                0,
+                {0, 0, 0},
+                0.0
+            };
+            // scrive 100 record vuoti sul file
+            for (int i = 1; i <= 100; i++) {
+                fwrite(&accountVuoto, sizeof(DatiAccount), 1, pAccountFile);
+            }
+            fclose(pAccountFile); // fclose chiude il file
         }
-        fclose(pAccountFile); // fclose chiude il file
     }
 
     // fopen apre il file per l'aggiornamento in forma binaria
