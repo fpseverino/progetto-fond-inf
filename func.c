@@ -24,7 +24,7 @@ unsigned int menùPrincipale() {
     return sceltaMenù;
 }
 
-void aggiungiNuovoConto(FILE *pFile) {
+void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
     printf("%s", "\nInserisci il numero del nuovo account (1 - 100): ");
     unsigned int numeroAccount; // numero del conto
     scanf("%u", &numeroAccount);
@@ -80,17 +80,44 @@ void aggiungiNuovoConto(FILE *pFile) {
         fflush(stdin);
 
         printf("%s", "Inserisci il tipo di conto\n"
-            " 0 - risparmio\n"
-            " 1 - corrente\n"
-            " 2 - fisso per 1 anno\n"
-            " 3 - fisso per 2 anni\n"
-            " 4 - fisso per 3 anni\n? ");
-        scanf("%d", &account.tipoConto);
+            " 0 - corrente (interessi 0\%)\n"
+            " 1 - deposito (interessi 1\% all'anno)\n"
+            " 2 - fisso per 1 anno (interessi 2\% all'anno)\n"
+            " 3 - fisso per 2 anni (interessi 2,5\% all'anno)\n"
+            " 4 - fisso per 3 anni (interessi 3\% all'anno)\n? ");
+        TIPO_CONTO temp;
+        scanf("%d", &temp);
         fflush(stdin);
+        switch (temp) {
+            case 0:
+                account.tipoConto = corrente;
+                account.interessi = 1.0;
+                break;
+            case 1:
+                account.tipoConto = deposito;
+                account.interessi = 1.01;
+                break;
+            case 2:
+                account.tipoConto = fisso1Anno;
+                account.interessi = 1.02;
+                break;
+            case 3:
+                account.tipoConto = fisso2Anni;
+                account.interessi = 1.025;
+                break;
+            case 4:
+                account.tipoConto = fisso3Anni;
+                account.interessi = 1.03;
+                break;
+            default:
+                puts("ERRORE: Scelta non consentita, operazione annullata.\n");
+                return;
+                break;
+        }
 
-        printf("%s", "Inserisci data odierna (gg/mm/aaaa)\n? ");
-        scanf("%u/%u/%u", &account.dataVersamento.giorno, &account.dataVersamento.mese, &account.dataVersamento.anno);
-        fflush(stdin);
+        account.dataVersamento.giorno = dataOdierna.giorno;
+        account.dataVersamento.mese = dataOdierna.mese;
+        account.dataVersamento.anno = dataOdierna.anno;
 
         account.numeroConto = numeroAccount;
 
@@ -100,7 +127,7 @@ void aggiungiNuovoConto(FILE *pFile) {
         // inserisci il record nel file
         fwrite(&account, sizeof(DatiAccount), 1, pFile);
 
-        puts(" Nuovo conto aggiunto.\n");
+        puts("\nNuovo conto aggiunto.\n");
     }
 }
 
@@ -134,14 +161,45 @@ void vediDettagliConto(FILE *pFile) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* stampa i dettagli dell'account */ {
         printf(" Nome: %s\n", account.nome);
+
         printf(" Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
+
         printf(" Codice fiscale: %s\n", account.codiceFiscale);
+
         printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
+
         printf(" Telefono: %d\n", account.telefono);
-        printf(" Saldo: %.2lf\n", account.saldo);
-        printf(" Tipo di conto: %d\n", account.tipoConto);
+
+        printf(" Saldo: €%.2lf\n", account.saldo);
+
+        printf("%s", " Tipo di conto: ");
+        switch (account.tipoConto) {
+        case 0:
+            printf("%s", "corrente\n");
+            break;
+        case 1:
+            printf("%s", "deposito\n");
+            break;
+        case 2:
+            printf("%s", "fisso per 1 anno\n");
+            break;
+        case 3:
+            printf("%s", "fisso per 2 anni\n");
+            break;
+        case 4:
+            printf("%s", "fisso per 3 anni\n");
+            break;
+        default:
+            printf("%s", "ERRORE\n");
+            break;
+        }
+
         printf(" Numero del conto: %u\n", account.numeroConto);
-        printf(" Data ultimo versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
+
+        printf(" Data di versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
+
+        printf(" Importo degli interessi: €%.2lf\n", ((account.interessi * account.saldo /* * tempoTrascorso(account.dataVersamento, dataOdierna) */) - account.saldo));
+
         puts("");
     }
 }

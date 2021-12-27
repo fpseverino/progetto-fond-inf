@@ -46,13 +46,20 @@ int main() {
     if ((pAccountFile = fopen("accounts.dat", "rb+")) == NULL) {
         puts("Il file non può essere aperto.");
     } else {
+        // inserisci la data attuale da usare nelle varie funzioni
+        printf("%s", "Ciao! Inserisci la data di oggi (gg/mm/aaaa): ");
+        Data oggi;
+        scanf("%u/%u/%u", &oggi.giorno, &oggi.mese, &oggi.anno);
+        fflush(stdin);
+        puts("");
+
         unsigned int scelta; // scelta dell'utente
         // consenti all'utente di specificare l'azione
         while ((scelta = menùPrincipale()) != 7) {
             switch (scelta) {
                 case 1:
                     // Aggiungi nuovo conto
-                    aggiungiNuovoConto(pAccountFile);
+                    aggiungiNuovoConto(pAccountFile, oggi);
                     break;
                 case 2:
                     // Visualizza elenco conti
