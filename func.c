@@ -80,11 +80,11 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         fflush(stdin);
 
         printf("%s", "Inserisci il tipo di conto\n"
-            " 0 - corrente (interessi 0\%)\n"
-            " 1 - deposito (interessi 1\% all'anno)\n"
-            " 2 - fisso per 1 anno (interessi 2\% all'anno)\n"
-            " 3 - fisso per 2 anni (interessi 2,5\% all'anno)\n"
-            " 4 - fisso per 3 anni (interessi 3\% all'anno)\n? ");
+            " 0 - corrente (interessi 0%%)\n"
+            " 1 - deposito (interessi 1%% all'anno)\n"
+            " 2 - fisso per 1 anno (interessi 2%% all'anno)\n"
+            " 3 - fisso per 2 anni (interessi 2,5%% all'anno)\n"
+            " 4 - fisso per 3 anni (interessi 3%% all'anno)\n? ");
         TIPO_CONTO temp;
         scanf("%d", &temp);
         fflush(stdin);
