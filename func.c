@@ -231,7 +231,19 @@ void eliminaAccount(FILE *pFile) {
     // sposta il puntatore del file al record corretto nel file
     fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
 
-    DatiAccount account; // memorizza il record letto dal file
+    // crea DatiAccount con informazioni predefinite
+    DatiAccount account = {
+        "",
+        {0, 0, 0},
+        "",
+        "",
+        "",
+        0.0,
+        0,
+        0,
+        {0, 0, 0},
+        0.0
+    };
 
     // leggi il record dal file
     fread(&account, sizeof(DatiAccount), 1, pFile);
