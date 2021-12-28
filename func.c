@@ -30,6 +30,12 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
     scanf("%u", &numeroAccount);
     fflush(stdin);
 
+    // controlla che il numero inserito rientri nei limiti del file
+    if (numeroAccount < 1 || numeroAccount > 100) {
+        puts(" ERRORE: Scelta non consentita, operazione di aggiunta conto annullata.\n");
+        return;
+    }
+
     // sposta il puntatore del file al record corretto nel file
     fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
 
@@ -39,7 +45,7 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         {0, 0, 0},
         "",
         "",
-        0,
+        "",
         0.0,
         0,
         0,
@@ -55,36 +61,36 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         printf(" L'account #%u contiene già informazioni.\n\n", account.numeroConto);
     } else /* crea il record */ {
         // l'utente inserisce i dati
-        printf("%s", "Inserisci nome e cognome\n? ");
+        printf("%s", " Inserisci nome e cognome: ");
         scanf(" %24[^\n]", account.nome);
         fflush(stdin);
 
-        printf("%s", "Inserisci data di nascita (gg/mm/aaaa)\n? ");
+        printf("%s", " Inserisci data di nascita (gg/mm/aaaa): ");
         scanf("%u/%u/%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
         fflush(stdin);
 
-        printf("%s", "Inserisci codice fiscale\n? ");
+        printf("%s", " Inserisci codice fiscale: ");
         scanf("%16s", account.codiceFiscale);
         fflush(stdin);
 
-        printf("%s", "Inserisci indirizzo di residenza\n? ");
-        scanf(" %24[^\n]", account.indirizzoResidenza);
+        printf("%s", " Inserisci indirizzo di residenza: ");
+        scanf(" %29[^\n]", account.indirizzoResidenza);
         fflush(stdin);
 
-        printf("%s", "Inserisci numero di telefono\n? ");
-        scanf("%d", &account.telefono);
+        printf("%s", " Inserisci numero di telefono: ");
+        scanf(" %16[^\n]", account.telefono);
         fflush(stdin);
 
-        printf("%s", "Inserisci saldo\n? ");
+        printf("%s", " Inserisci saldo: ");
         scanf("%lf", &account.saldo);
         fflush(stdin);
 
-        printf("%s", "Inserisci il tipo di conto\n"
-            " 0 - corrente (interessi 0%%)\n"
-            " 1 - deposito (interessi 1%% all'anno)\n"
-            " 2 - fisso per 1 anno (interessi 2%% all'anno)\n"
-            " 3 - fisso per 2 anni (interessi 2,5%% all'anno)\n"
-            " 4 - fisso per 3 anni (interessi 3%% all'anno)\n? ");
+        printf("%s", " Inserisci il tipo di conto:\n"
+            "  0 - corrente (interessi: 0%)\n"
+            "  1 - deposito (interessi: 1% all'anno)\n"
+            "  2 - fisso per 1 anno (interessi: 2% all'anno)\n"
+            "  3 - fisso per 2 anni (interessi: 2,5% all'anno)\n"
+            "  4 - fisso per 3 anni (interessi: 3% all'anno)\n ? ");
         TIPO_CONTO temp;
         scanf("%d", &temp);
         fflush(stdin);
@@ -110,7 +116,7 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
                 account.interessi = 1.03;
                 break;
             default:
-                puts("ERRORE: Scelta non consentita, operazione annullata.\n");
+                puts("  ERRORE: Scelta non consentita, operazione di aggiunta conto annullata.\n");
                 return;
                 break;
         }
@@ -127,7 +133,7 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         // inserisci il record nel file
         fwrite(&account, sizeof(DatiAccount), 1, pFile);
 
-        puts("\nNuovo conto aggiunto.\n");
+        printf("\nNuovo conto (#%u) aggiunto.\n\n", account.numeroConto);
     }
 }
 
@@ -145,7 +151,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         {0, 0, 0},
         "",
         "",
-        0,
+        "",
         0.0,
         0,
         0,
@@ -160,6 +166,8 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* stampa i dettagli dell'account */ {
+        printf("\nDati dell'account #%u:\n", account.numeroConto);
+
         printf(" Nome: %s\n", account.nome);
 
         printf(" Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
@@ -168,7 +176,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
 
         printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
 
-        printf(" Telefono: %d\n", account.telefono);
+        printf(" Telefono: %s\n", account.telefono);
 
         printf(" Saldo: €%.2lf\n", account.saldo);
 

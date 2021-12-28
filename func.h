@@ -30,8 +30,8 @@ typedef struct {
     char nome[25];
     Data dataNascita;
     char codiceFiscale[17];
-    char indirizzoResidenza[25];
-    int telefono;
+    char indirizzoResidenza[30];
+    char telefono[17];
     double saldo;
     TIPO_CONTO tipoConto;
     unsigned int numeroConto;

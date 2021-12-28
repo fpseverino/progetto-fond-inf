@@ -17,7 +17,7 @@ int main() {
 
         // crea il file
         if ((pAccountFile = fopen("accounts.dat", "wb")) == NULL) {
-            puts("Il file non può essere aperto.");
+            puts("ERRORE: Il file non può essere aperto.");
         } else {
             // crea DatiAccount con informazioni predefinite
             DatiAccount accountVuoto = {
@@ -25,7 +25,7 @@ int main() {
                 {0, 0, 0},
                 "",
                 "",
-                0,
+                "",
                 0.0,
                 0,
                 0,
@@ -44,7 +44,7 @@ int main() {
 
     // fopen apre il file per l'aggiornamento in forma binaria
     if ((pAccountFile = fopen("accounts.dat", "rb+")) == NULL) {
-        puts("Il file non può essere aperto.");
+        puts("ERRORE: Il file non può essere aperto.");
     } else {
         // inserisci la data attuale da usare nelle varie funzioni
         printf("%s", "Ciao! Inserisci la data di oggi (gg/mm/aaaa): ");
@@ -88,7 +88,7 @@ int main() {
             }    
         }
         fclose(pAccountFile); // fclose chiude il file
-        puts("\nUscita dall'applicazione.");
+        puts("\nUscita dall'applicazione.\n");
     }
     return 0;
 }
