@@ -137,6 +137,47 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
     }
 }
 
+void eliminaAccount(FILE *pFile) {
+    printf("%s", "\nInserisci il numero dell'account da eliminare (1 - 100): ");
+    unsigned int numeroAccount; // numero del conto
+    scanf("%u", &numeroAccount);
+
+    // sposta il puntatore del file al record corretto nel file
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+
+    DatiAccount account; // memorizza il record letto dal file
+
+    // leggi il record dal file
+    fread(&account, sizeof(DatiAccount), 1, pFile);
+
+    // stampa un messaggio di errore se il conto non esiste
+    if (account.numeroConto == 0) {
+        printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
+    } else /* cancella il record */ {
+        // sposta il puntatore del file al record corretto nel file
+        fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+
+        // account vuoto
+        DatiAccount accountVuoto = {
+            "",
+            {0, 0, 0},
+            "",
+            "",
+            "",
+            0.0,
+            0,
+            0,
+            {0, 0, 0},
+            0.0
+        };
+
+        // sostituisci il record esistente con il record vuoto
+        fwrite(&accountVuoto, sizeof(DatiAccount), 1, pFile);
+
+        printf("\nConto #%u eliminato.\n\n", account.numeroConto);
+    }
+}
+
 void vediDettagliConto(FILE *pFile, Data dataOdierna) {
     printf("%s", "\nInserisci il numero dell'account da visionare (1 - 100): ");
     unsigned int numeroAccount; // numero del conto

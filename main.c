@@ -75,7 +75,7 @@ int main() {
                     break;
                 case 5:
                     // Elimina account
-                    puts("\nAccount eliminato!\n");
+                    eliminaAccount(pAccountFile);
                     break;
                 case 6:
                     // Vedi dettagli conto
