@@ -63,7 +63,7 @@ int main() {
                     break;
                 case 2:
                     // Visualizza elenco conti
-                    puts("\nVisualizzato elenco conti!\n");
+                    visualizzaElencoConti(pAccountFile);
                     break;
                 case 3:
                     // Modifica conto

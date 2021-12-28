@@ -137,6 +137,44 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
     }
 }
 
+void visualizzaElencoConti(FILE *pFile) {
+    // sposta il puntatore del file all'inizio del file
+    rewind(pFile);
+
+    // leggi tutti i record del file
+    while (!feof(pFile)) {
+        // crea DatiAccount con informazioni predefinite
+        DatiAccount account = {
+            "",
+            {0, 0, 0},
+            "",
+            "",
+            "",
+            0.0,
+            0,
+            0,
+            {0, 0, 0},
+            0.0
+        };
+
+        int risultato = fread(&account, sizeof(DatiAccount), 1, pFile);
+
+        // stampa i dati di un account
+        if (risultato != 0 && account.numeroConto != 0) {
+            printf("\nDati dell'account #%u:\n", account.numeroConto);
+
+            printf(" Nome: %s\n", account.nome);
+
+            printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
+
+            printf(" Telefono: %s\n", account.telefono);
+
+            printf(" Numero del conto: %u\n", account.numeroConto);
+        }
+    }
+    puts("");
+}
+
 void eliminaAccount(FILE *pFile) {
     printf("%s", "\nInserisci il numero dell'account da eliminare (1 - 100): ");
     unsigned int numeroAccount; // numero del conto
