@@ -175,6 +175,54 @@ void visualizzaElencoConti(FILE *pFile) {
     puts("");
 }
 
+void modificaConto(FILE *pFile) {
+    printf("%s", "\nInserisci il numero dell'account da modificare (1 - 100): ");
+    unsigned int numeroAccount; // numero del conto
+    scanf("%u", &numeroAccount);
+    fflush(stdin);
+
+    // sposta il puntatore del file al record corretto nel file
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+
+    // crea DatiAccount con informazioni predefinite
+    DatiAccount account = {
+        "",
+        {0, 0, 0},
+        "",
+        "",
+        "",
+        0.0,
+        0,
+        0,
+        {0, 0, 0},
+        0.0
+    };
+
+    // leggi il record dal file
+    fread(&account, sizeof(DatiAccount), 1, pFile);
+
+    // stampa un messaggio di errore se il conto non esiste
+    if (account.numeroConto == 0) {
+        printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
+    } else /* modifica il record */ {
+        printf("%s", " Inserisci nuovo indirizzo di residenza: ");
+        scanf(" %29[^\n]", account.indirizzoResidenza);
+        fflush(stdin);
+
+        printf("%s", " Inserisci nuovo numero di telefono: ");
+        scanf(" %16[^\n]", account.telefono);
+        fflush(stdin);
+
+        // sposta il puntatore del file al record corretto nel file
+        fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+
+        // scrivi il record aggiornato al posto del vecchio record nel file
+        fwrite(&account, sizeof(DatiAccount), 1, pFile);
+
+        printf("\nConto #%u modificato.\n\n", account.numeroConto);
+    }
+}
+
 void eliminaAccount(FILE *pFile) {
     printf("%s", "\nInserisci il numero dell'account da eliminare (1 - 100): ");
     unsigned int numeroAccount; // numero del conto
