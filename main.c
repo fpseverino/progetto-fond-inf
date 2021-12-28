@@ -67,7 +67,7 @@ int main() {
                     break;
                 case 3:
                     // Modifica conto
-                    puts("\nConto modificato!\n");
+                    modificaConto(pAccountFile);
                     break;
                 case 4:
                     // Transazione
