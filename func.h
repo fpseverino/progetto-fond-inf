@@ -41,6 +41,7 @@ typedef struct {
 
 unsigned int menùPrincipale();
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna);
-void vediDettagliConto(FILE *pFile);
+void vediDettagliConto(FILE *pFile, Data dataOdierna);
+int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
 
 #endif

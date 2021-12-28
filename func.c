@@ -19,7 +19,7 @@ unsigned int menùPrincipale() {
         " 7 - Uscita\n? ");
     
     unsigned int sceltaMenù;
-    scanf("%u", &sceltaMenù);
+    scanf("%u", &sceltaMenù); // scelta dell'utente
     fflush(stdin);
     return sceltaMenù;
 }
@@ -131,7 +131,7 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
     }
 }
 
-void vediDettagliConto(FILE *pFile) {
+void vediDettagliConto(FILE *pFile, Data dataOdierna) {
     printf("%s", "\nInserisci il numero dell'account da visionare (1 - 100): ");
     unsigned int numeroAccount; // numero del conto
     scanf("%u", &numeroAccount);
@@ -198,8 +198,25 @@ void vediDettagliConto(FILE *pFile) {
 
         printf(" Data di versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
 
-        printf(" Importo degli interessi: €%.2lf\n", ((account.interessi * account.saldo /* * tempoTrascorso(account.dataVersamento, dataOdierna) */) - account.saldo));
+        double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataVersamento, dataOdierna);
+        if (anniPassati(account.dataVersamento, dataOdierna) != 0) {
+            importoInteressi -= account.saldo;
+        } 
+        printf(" Importo degli interessi: €%.2lf\n", importoInteressi);
 
         puts("");
     }
+}
+
+int anniPassati(Data primaData, Data secondaData) {
+    int anni = 0;
+    while (secondaData.anno > primaData.anno) {
+        if (secondaData.mese >= primaData.mese) {
+            if (secondaData.giorno >= primaData.giorno) {
+                anni++;
+                primaData.anno++;
+            } else break;
+        } else break;
+    }
+    return anni;
 }

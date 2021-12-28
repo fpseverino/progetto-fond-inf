@@ -79,7 +79,7 @@ int main() {
                     break;
                 case 6:
                     // Vedi dettagli conto
-                    vediDettagliConto(pAccountFile);
+                    vediDettagliConto(pAccountFile, oggi);
                     break;
                 default:
                     // scelta non valida
