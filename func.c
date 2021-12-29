@@ -141,6 +141,8 @@ void visualizzaElencoConti(FILE *pFile) {
     // sposta il puntatore del file all'inizio del file
     rewind(pFile);
 
+    int nAccount = 0; // salva il numero di account letti
+
     // leggi tutti i record del file
     while (!feof(pFile)) {
         // crea DatiAccount con informazioni predefinite
@@ -161,6 +163,8 @@ void visualizzaElencoConti(FILE *pFile) {
 
         // stampa i dati di un account
         if (risultato != 0 && account.numeroConto != 0) {
+            nAccount++;
+
             printf("\nDati dell'account #%u:\n", account.numeroConto);
 
             printf(" Nome: %s\n", account.nome);
@@ -172,6 +176,11 @@ void visualizzaElencoConti(FILE *pFile) {
             printf(" Numero del conto: %u\n", account.numeroConto);
         }
     }
+
+    if (nAccount == 0) {
+        puts("\nNon ci sono account salvati.");
+    }
+
     puts("");
 }
 
