@@ -39,7 +39,7 @@ typedef struct {
     double interessi;
 } DatiAccount;
 
-unsigned int menùPrincipale();
+unsigned int menuPrincipale();
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoConti(FILE *pFile);
 void modificaConto(FILE *pFile);

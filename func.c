@@ -8,7 +8,7 @@
 #include "func.h"
 #include <stdio.h>
 
-unsigned int menùPrincipale() {
+unsigned int menuPrincipale() {
     printf("%s", "MENU PRINCIPALE\n"
         " 1 - Aggiungi nuovo conto\n"
         " 2 - Visualizza elenco conti\n"
@@ -18,10 +18,10 @@ unsigned int menùPrincipale() {
         " 6 - Vedi dettagli conto\n"
         " 7 - Uscita\n? ");
     
-    unsigned int sceltaMenù;
-    scanf("%u", &sceltaMenù); // scelta dell'utente
+    unsigned int sceltaMenu;
+    scanf("%u", &sceltaMenu); // scelta dell'utente
     fflush(stdin);
-    return sceltaMenù;
+    return sceltaMenu;
 }
 
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {

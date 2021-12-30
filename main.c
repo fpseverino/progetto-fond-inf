@@ -52,7 +52,7 @@ int main() {
 
         unsigned int scelta; // scelta dell'utente
         // consenti all'utente di specificare l'azione
-        while ((scelta = menùPrincipale()) != 7) {
+        while ((scelta = menuPrincipale()) != 7) {
             switch (scelta) {
                 case 1:
                     // Aggiungi nuovo conto
