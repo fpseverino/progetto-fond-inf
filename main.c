@@ -11,10 +11,7 @@
 int main() {
     FILE *pAccountFile; // puntatore al file accounts.dat
 
-    if ((pAccountFile = fopen("accounts.dat", "rb")) == NULL) {
-        // il file non esiste e deve essere creato
-        fclose(pAccountFile);
-
+    if ((pAccountFile = fopen("accounts.dat", "rb")) == NULL) /* il file non esiste e deve essere creato */ {
         // crea il file
         if ((pAccountFile = fopen("accounts.dat", "wb")) == NULL) {
             puts("ERRORE: Il file non può essere aperto.");
