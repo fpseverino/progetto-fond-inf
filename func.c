@@ -454,7 +454,6 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
 
 const int giorniMese[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // numero di giorni in ogni mese
 
-// conta il numero di anni bisestili prima di una data
 int contaAnniBisestili(Data data) {
     int anni = data.anno;
     // controlla se l'anno corrente debba essere calcolato o meno
@@ -492,7 +491,7 @@ int isLeapYear(int anno) {
 int controllaData(Data data) {
     // controlla il range degli anni, mesi e giorni
     if (data.anno > 2070 || data.anno < 1900) return 0;
-    // usando il tipo unsigned int nella funzione anniPassati non dovrebbe essere possibile calcolare più di 179 anni di differenza
+        // usando il tipo unsigned int nella funzione anniPassati() non dovrebbe essere possibile calcolare più di circa 179 anni di differenza
     if (data.mese < 1 || data.mese > 12) return 0;
     if (data.giorno < 1 || data.giorno > 31) return 0;
     // controlla febbraio negli anni bisestili

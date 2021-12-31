@@ -46,9 +46,9 @@ void transazione(FILE *pFile, Data dataOdierna);
 void eliminaAccount(FILE *pFile);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
 
-int contaAnniBisestili(Data data);
+int contaAnniBisestili(Data data); // conta il numero di anni bisestili prima di una data
 unsigned int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
-int isLeapYear(int anno);
-int controllaData(Data data);
+int isLeapYear(int anno); // ritorna 1 se l'anno è bisestile
+int controllaData(Data data); // funzione che verifica che una data sia valida
 
 #endif
