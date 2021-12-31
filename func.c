@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 unsigned int menuPrincipale() {
-    printf("%s", "MENU PRINCIPALE\n"
+    printf("%s", "*** MENU PRINCIPALE ***\n"
         " 1 - Aggiungi nuovo conto\n"
         " 2 - Visualizza elenco conti\n"
         " 3 - Modifica conto\n"
@@ -68,6 +68,11 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         printf("%s", " Inserisci data di nascita (gg/mm/aaaa): ");
         scanf("%u/%u/%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
         fflush(stdin);
+        if (controllaData(account.dataNascita)) {
+            puts("  ERRORE: Inserisci una data valida, operazione di aggiunta conto annullata.\n");
+            return;
+        }
+        
 
         printf("%s", " Inserisci codice fiscale: ");
         scanf("%16s", account.codiceFiscale);
@@ -226,7 +231,109 @@ void modificaConto(FILE *pFile) {
     }
 }
 
-// void transazione(FILE *pFile, Data dataOdierna);
+void transazione(FILE *pFile, Data dataOdierna) {
+    printf("%s", "\nInserisci il numero dell'account su cui operare (1 - 100): ");
+    unsigned int numeroAccount; // numero del conto
+    scanf("%u", &numeroAccount);
+    fflush(stdin);
+
+    // sposta il puntatore del file al record corretto nel file
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+
+    // crea DatiAccount con informazioni predefinite
+    DatiAccount account = {
+        "",
+        {0, 0, 0},
+        "",
+        "",
+        "",
+        0.0,
+        0,
+        0,
+        {0, 0, 0},
+        0.0
+    };
+
+    // leggi il record dal file
+    fread(&account, sizeof(DatiAccount), 1, pFile);
+
+    // stampa un messaggio di errore se il conto non esiste
+    if (account.numeroConto == 0) {
+        printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
+    } else /* controlla il tipo di conto */ {
+        // stampa le informazioni dell'account prima della transazione
+        printf("\n#%-5d%-30s€%.2lf\n", account.numeroConto, account.nome, account.saldo);
+
+        switch (account.tipoConto) {
+            case corrente:
+                /* code */
+                break;
+            
+            case deposito:
+            case fisso1Anno:
+            case fisso2Anni:
+            case fisso3Anni:
+                // l'utente sceglie se depositare o prelevare denaro
+                printf("%s", "\nScegli il tipo di operazione:\n"
+                    " 1 - deposita denaro\n"
+                    " 2 - preleva denaro\n? ");
+                unsigned int sceltaOperazione; // scelta dell'utente
+                scanf("%u", &sceltaOperazione);
+                fflush(stdin);
+                // deposita o preleva denaro in base alla scelta dell'utente
+                switch (sceltaOperazione) {
+                    case 1 /* deposita denaro */:
+                        printf("%s", "\nInserisci la somma da depositare: ");
+                        double versamento;
+                        scanf("%lf", &versamento);
+                        fflush(stdin);
+
+                        if (versamento <= 0.0) {
+                            puts(" ERRORE: Inserisci una somma positiva, transazione annullata.\n");
+                            return;
+                        }
+
+                        puts(" Transazione avvenuta!"); // debug
+                        break;
+
+                    case 2 /* preleva denaro */:
+                        if (account.tipoConto > 1) {
+                            if (anniPassati(account.dataVersamento, dataOdierna) < (account.tipoConto - 1)) {
+                                puts("\nDato il tuo tipo di conto, al momento non ti è permesso ritirare denaro.");
+                                puts(" Operazione annullata.\n");
+                                return;
+                            }
+                        }
+
+                        printf("%s", "\nInserisci la somma da prelevare: ");
+                        double prelievo;
+                        scanf("%lf", &prelievo);
+                        fflush(stdin);
+
+                        if (prelievo <= 0.0) {
+                            puts(" ERRORE: Inserisci una somma positiva, transazione annullata.\n");
+                            return;
+                        }
+                        
+                        puts(" Transazione avvenuta!");
+                        break;
+
+                    default:
+                        puts(" ERRORE: Scelta non consentita, transazione annullata.\n");
+                        return;
+                        break;
+                }
+                break;
+            
+            default:
+                puts(" ERRORE.");
+                break;
+        }
+
+        // stampa le informazioni dell'account dopo la transazione
+        printf("\n#%-5d%-30s€%.2lf\n\n", account.numeroConto, account.nome, account.saldo);
+    }
+}
 
 void eliminaAccount(FILE *pFile) {
     printf("%s", "\nInserisci il numero dell'account da eliminare (1 - 100): ");
@@ -319,45 +426,85 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         printf(" Saldo: €%.2lf\n", account.saldo);
         printf("%s", " Tipo di conto: ");
         switch (account.tipoConto) {
-            case 0:
-                printf("%s", "corrente\n");
+            case corrente:
+                puts("corrente");
                 break;
-            case 1:
-                printf("%s", "deposito\n");
+            case deposito:
+                puts("deposito");
                 break;
-            case 2:
-                printf("%s", "fisso per 1 anno\n");
+            case fisso1Anno:
+                puts("fisso per 1 anno");
                 break;
-            case 3:
-                printf("%s", "fisso per 2 anni\n");
+            case fisso2Anni:
+                puts("fisso per 2 anni");
                 break;
-            case 4:
-                printf("%s", "fisso per 3 anni\n");
+            case fisso3Anni:
+                puts("fisso per 3 anni");
                 break;
             default:
-                printf("%s", "ERRORE\n");
+                puts("ERRORE");
                 break;
         }
         printf(" Numero del conto: %u\n", account.numeroConto);
         printf(" Data di versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
         // calcola gli interessi
-        double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataVersamento, dataOdierna);
-        if (anniPassati(account.dataVersamento, dataOdierna) != 0) {
-            importoInteressi -= account.saldo;
-        } 
+        double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataVersamento, dataOdierna) - account.saldo * anniPassati(account.dataVersamento, dataOdierna);
         printf(" Importo degli interessi: €%.2lf\n\n", importoInteressi);
     }
 }
 
-int anniPassati(Data primaData, Data secondaData) {
-    int anni = 0;
-    while (secondaData.anno > primaData.anno) {
-        if (secondaData.mese >= primaData.mese) {
-            if (secondaData.giorno >= primaData.giorno) {
-                anni++;
-                primaData.anno++;
-            } else break;
-        } else break;
+const int giorniMese[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // numero di giorni in ogni mese
+
+// conta il numero di anni bisestili prima di una data
+int contaAnniBisestili(Data data) {
+    int anni = data.anno;
+    // controlla se l'anno corrente debba essere calcolato o meno
+    if (data.mese <= 2) anni--;
+    // un anno è bisestile se è non secolare e divisibile per 4 o secolare e divisibile per 400
+    return anni / 4 - anni / 100 + anni / 400;
+}
+
+unsigned int anniPassati(Data primaData, Data secondaData) {
+    // conta giorni dalla prima data all'anno zero
+    unsigned int n1 = primaData.anno * 365 + primaData.giorno;
+    for (int i = 0; i < primaData.mese - 1; i++) {
+        n1 += giorniMese[i];
     }
+    n1 += contaAnniBisestili(primaData);
+    // conta giorni dalla seconda data all'anno zero
+    unsigned int n2 = secondaData.anno * 365 + secondaData.giorno;
+    for (int i = 0; i < secondaData.mese - 1; i++) {
+        n2 += giorniMese[i];
+    }
+    n2 += contaAnniBisestili(secondaData);
+    // calcola gli anni fra le due date
+    unsigned int anni;
+    if (n2 > n1) {
+        anni = (n2 - n1) / 365;
+    } else anni = 0;
     return anni;
+}
+
+int isLeapYear(int anno) {
+    // ritorna 1 se l'anno è bisestile
+    return (((anno % 4 == 0) && (anno % 100 != 0)) || (anno % 400 == 0));
+}
+
+int controllaData(Data data) {
+    // controlla il range degli anni, mesi e giorni
+    if (data.anno > 2070 || data.anno < 1900) return 0;
+    // usando il tipo unsigned int nella funzione anniPassati non dovrebbe essere possibile calcolare più di 179 anni di differenza
+    if (data.mese < 1 || data.mese > 12) return 0;
+    if (data.giorno < 1 || data.giorno > 31) return 0;
+    // controlla febbraio negli anni bisestili
+    if (data.mese == 2) {
+        if (isLeapYear(data.anno)) {
+            return (data.giorno <= 29);
+        } else return (data.giorno <= 28);
+    }
+    // controlla mesi con 30 giorni
+    if (data.mese == 4 || data.mese == 6 || data.mese == 9 || data.mese == 11) {
+        return (data.giorno <= 30);
+    }
+    return 1;
 }

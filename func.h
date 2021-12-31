@@ -12,9 +12,7 @@
 
 //  definizione della struttura Data per la gestione delle date
 typedef struct {
-    unsigned int giorno;
-    unsigned int mese;
-    unsigned int anno;
+    unsigned int giorno, mese, anno;
 } Data;
 
 // definizione dell'enumerazione TipoConto dei vari tipi di conto
@@ -44,10 +42,13 @@ unsigned int menuPrincipale();
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoConti(FILE *pFile);
 void modificaConto(FILE *pFile);
-// void transazione(FILE *pFile, Data dataOdierna);
+void transazione(FILE *pFile, Data dataOdierna);
 void eliminaAccount(FILE *pFile);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
 
-int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
+int contaAnniBisestili(Data data);
+unsigned int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
+int isLeapYear(int anno);
+int controllaData(Data data);
 
 #endif

@@ -42,10 +42,14 @@ int main() {
         puts("ERRORE: Il file non può essere aperto.");
     } else {
         // inserisci la data attuale da usare nelle varie funzioni
-        printf("%s", "Ciao! Inserisci la data di oggi (gg/mm/aaaa): ");
+        printf("%s", "\nCiao! Inserisci la data di oggi (gg/mm/aaaa): ");
         Data oggi;
         scanf("%u/%u/%u", &oggi.giorno, &oggi.mese, &oggi.anno);
         fflush(stdin);
+        if (!controllaData(oggi)) {
+            puts(" ERRORE: Inserisci una data valida.\n");
+            return 0;
+        }
         puts("");
 
         unsigned int scelta; // scelta dell'utente
@@ -53,27 +57,21 @@ int main() {
         while ((scelta = menuPrincipale()) != 7) {
             switch (scelta) {
                 case 1:
-                    // Aggiungi nuovo conto
                     aggiungiNuovoConto(pAccountFile, oggi);
                     break;
                 case 2:
-                    // Visualizza elenco conti
                     visualizzaElencoConti(pAccountFile);
                     break;
                 case 3:
-                    // Modifica conto
                     modificaConto(pAccountFile);
                     break;
                 case 4:
-                    // Transazione
-                    puts("\nTransazione avvenuta!\n");
+                    transazione(pAccountFile, oggi);
                     break;
                 case 5:
-                    // Elimina account
                     eliminaAccount(pAccountFile);
                     break;
                 case 6:
-                    // Vedi dettagli conto
                     vediDettagliConto(pAccountFile, oggi);
                     break;
                 default:
