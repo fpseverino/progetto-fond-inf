@@ -167,7 +167,6 @@ void visualizzaElencoConti(FILE *pFile) {
             printf(" Nome: %s\n", account.nome);
             printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
             printf(" Telefono: %s\n", account.telefono);
-            printf(" Numero del conto: %u\n", account.numeroConto);
             nAccount++;
         }
     }
@@ -227,39 +226,7 @@ void modificaConto(FILE *pFile) {
     }
 }
 
-void transazione(FILE *pFile, Data dataOdierna) {
-    printf("%s", "\nInserisci il numero dell'account su cui operare (1 - 100): ");
-    unsigned int numeroAccount; // numero del conto
-    scanf("%u", &numeroAccount);
-    fflush(stdin);
-
-    // sposta il puntatore del file al record corretto nel file
-    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-
-    // crea DatiAccount con informazioni predefinite
-    DatiAccount account = {
-        "",
-        {0, 0, 0},
-        "",
-        "",
-        "",
-        0.0,
-        0,
-        0,
-        {0, 0, 0},
-        0.0
-    };
-
-    // leggi il record dal file
-    fread(&account, sizeof(DatiAccount), 1, pFile);
-
-    // stampa un messaggio di errore se il conto non esiste
-    if (account.numeroConto == 0) {
-        printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
-    } else /* something */ {
-        // code
-    }
-}
+// void transazione(FILE *pFile, Data dataOdierna);
 
 void eliminaAccount(FILE *pFile) {
     printf("%s", "\nInserisci il numero dell'account da eliminare (1 - 100): ");

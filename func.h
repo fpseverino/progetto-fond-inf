@@ -19,11 +19,11 @@ typedef struct {
 
 // definizione dell'enumerazione TipoConto dei vari tipi di conto
 typedef enum { corrente, deposito, fisso1Anno, fisso2Anni, fisso3Anni } TIPO_CONTO;
-    // corrente: interessi 0% (manda e ricevi denaro verso e da altri conti)
-    // deposito: interessi 1% all'anno (solo deposito e ritiro denaro)
-    // fisso1Anno: interessi 2% all'anno (solo deposito, impossibile ritirare denaro prima di un anno)
+    // corrente:   interessi 0%            (manda e ricevi denaro verso e da altri conti)
+    // deposito:   interessi 1% all'anno   (solo deposito e ritiro denaro)
+    // fisso1Anno: interessi 2% all'anno   (solo deposito, impossibile ritirare denaro prima di un anno)
     // fisso2Anni: interessi 2,5% all'anno (solo deposito, impossibile ritirare denaro prima di due anni)
-    // fisso3Anni: interessi 3% all'anno (solo deposito, impossibile ritirare denaro prima di tre anni)
+    // fisso3Anni: interessi 3% all'anno   (solo deposito, impossibile ritirare denaro prima di tre anni)
 
 // definizione della struttura DatiAccount dei dati di ogni account
 typedef struct {
@@ -40,12 +40,14 @@ typedef struct {
 } DatiAccount;
 
 unsigned int menuPrincipale();
+
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoConti(FILE *pFile);
 void modificaConto(FILE *pFile);
-void transazione(FILE *pFile, Data dataOdierna);
+// void transazione(FILE *pFile, Data dataOdierna);
 void eliminaAccount(FILE *pFile);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
+
 int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
 
 #endif
