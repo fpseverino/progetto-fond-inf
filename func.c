@@ -72,7 +72,6 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
             puts("  ERRORE: Inserisci una data valida, operazione di aggiunta conto annullata.\n");
             return;
         }
-        
 
         printf("%s", " Inserisci codice fiscale: ");
         scanf("%16s", account.codiceFiscale);

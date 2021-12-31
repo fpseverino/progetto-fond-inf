@@ -33,7 +33,7 @@ int main() {
             for (int i = 1; i <= 100; i++) {
                 fwrite(&accountVuoto, sizeof(DatiAccount), 1, pAccountFile);
             }
-            fclose(pAccountFile); // fclose chiude il file
+            fclose(pAccountFile);
         }
     }
 
@@ -46,6 +46,7 @@ int main() {
         Data oggi;
         scanf("%u/%u/%u", &oggi.giorno, &oggi.mese, &oggi.anno);
         fflush(stdin);
+        // controlla che la data sia valida
         if (!controllaData(oggi)) {
             puts(" ERRORE: Inserisci una data valida.\n");
             return 0;
@@ -56,31 +57,24 @@ int main() {
         // consenti all'utente di specificare l'azione
         while ((scelta = menuPrincipale()) != 7) {
             switch (scelta) {
-                case 1:
-                    aggiungiNuovoConto(pAccountFile, oggi);
-                    break;
-                case 2:
-                    visualizzaElencoConti(pAccountFile);
-                    break;
-                case 3:
-                    modificaConto(pAccountFile);
-                    break;
-                case 4:
-                    transazione(pAccountFile, oggi);
-                    break;
-                case 5:
-                    eliminaAccount(pAccountFile);
-                    break;
-                case 6:
-                    vediDettagliConto(pAccountFile, oggi);
-                    break;
-                default:
-                    // scelta non valida
-                    puts("\nERRORE: Scegli un'opzione dal menù.\n");
-                    break;
+                case 1: aggiungiNuovoConto(pAccountFile, oggi);
+                        break;
+                case 2: visualizzaElencoConti(pAccountFile);
+                        break;
+                case 3: modificaConto(pAccountFile);
+                        break;
+                case 4: transazione(pAccountFile, oggi);
+                        break;
+                case 5: eliminaAccount(pAccountFile);
+                        break;
+                case 6: vediDettagliConto(pAccountFile, oggi);
+                        break;
+                default: // scelta non valida
+                        puts("\nERRORE: Scegli un'opzione dal menù.\n");
+                        break;
             }    
         }
-        fclose(pAccountFile); // fclose chiude il file
+        fclose(pAccountFile);
         puts("\nUscita dall'applicazione.\n");
     }
     return 0;
