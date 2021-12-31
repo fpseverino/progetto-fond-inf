@@ -29,12 +29,10 @@ int main() {
                 {0, 0, 0},
                 0.0
             };
-
             // scrive 100 record vuoti sul file
             for (int i = 1; i <= 100; i++) {
                 fwrite(&accountVuoto, sizeof(DatiAccount), 1, pAccountFile);
             }
-
             fclose(pAccountFile); // fclose chiude il file
         }
     }

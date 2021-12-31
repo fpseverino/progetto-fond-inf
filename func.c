@@ -163,17 +163,11 @@ void visualizzaElencoConti(FILE *pFile) {
 
         // stampa i dati di un account
         if (risultato != 0 && account.numeroConto != 0) {
-            nAccount++;
-
             printf("\nDati dell'account #%u:\n", account.numeroConto);
-
             printf(" Nome: %s\n", account.nome);
-
             printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
-
             printf(" Telefono: %s\n", account.telefono);
-
-            printf(" Numero del conto: %u\n", account.numeroConto);
+            nAccount++;
         }
     }
 
@@ -231,6 +225,8 @@ void modificaConto(FILE *pFile) {
         printf("\nConto #%u modificato.\n\n", account.numeroConto);
     }
 }
+
+// void transazione(FILE *pFile, Data dataOdierna);
 
 void eliminaAccount(FILE *pFile) {
     printf("%s", "\nInserisci il numero dell'account da eliminare (1 - 100): ");
@@ -315,52 +311,41 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* stampa i dettagli dell'account */ {
         printf("\nDati dell'account #%u:\n", account.numeroConto);
-
         printf(" Nome: %s\n", account.nome);
-
         printf(" Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
-
         printf(" Codice fiscale: %s\n", account.codiceFiscale);
-
         printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
-
         printf(" Telefono: %s\n", account.telefono);
-
         printf(" Saldo: €%.2lf\n", account.saldo);
-
         printf("%s", " Tipo di conto: ");
         switch (account.tipoConto) {
-        case 0:
-            printf("%s", "corrente\n");
-            break;
-        case 1:
-            printf("%s", "deposito\n");
-            break;
-        case 2:
-            printf("%s", "fisso per 1 anno\n");
-            break;
-        case 3:
-            printf("%s", "fisso per 2 anni\n");
-            break;
-        case 4:
-            printf("%s", "fisso per 3 anni\n");
-            break;
-        default:
-            printf("%s", "ERRORE\n");
-            break;
+            case 0:
+                printf("%s", "corrente\n");
+                break;
+            case 1:
+                printf("%s", "deposito\n");
+                break;
+            case 2:
+                printf("%s", "fisso per 1 anno\n");
+                break;
+            case 3:
+                printf("%s", "fisso per 2 anni\n");
+                break;
+            case 4:
+                printf("%s", "fisso per 3 anni\n");
+                break;
+            default:
+                printf("%s", "ERRORE\n");
+                break;
         }
-
         printf(" Numero del conto: %u\n", account.numeroConto);
-
         printf(" Data di versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
-
+        // calcola gli interessi
         double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataVersamento, dataOdierna);
         if (anniPassati(account.dataVersamento, dataOdierna) != 0) {
             importoInteressi -= account.saldo;
         } 
-        printf(" Importo degli interessi: €%.2lf\n", importoInteressi);
-
-        puts("");
+        printf(" Importo degli interessi: €%.2lf\n\n", importoInteressi);
     }
 }
 
