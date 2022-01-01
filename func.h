@@ -9,6 +9,7 @@
 #define func_h
 
 #include <stdio.h>
+#include <stdbool.h>
 
 //  definizione della struttura Data per la gestione delle date
 typedef struct {
@@ -42,13 +43,13 @@ unsigned int menuPrincipale();
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoConti(FILE *pFile);
 void modificaConto(FILE *pFile);
-void transazione(FILE *pFile, Data dataOdierna);
+// transazione();
 void eliminaAccount(FILE *pFile);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
 
 int contaAnniBisestili(Data data); // conta il numero di anni bisestili prima di una data
 unsigned int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
-int isLeapYear(int anno); // ritorna 1 se l'anno è bisestile
-int controllaData(Data data); // funzione che verifica che una data sia valida
+bool isLeapYear(int anno); // ritorna true se l'anno è bisestile
+bool controllaData(Data data); // funzione che verifica che una data sia valida
 
 #endif
