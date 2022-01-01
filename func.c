@@ -385,7 +385,7 @@ unsigned int anniPassati(Data primaData, Data secondaData) {
 }
 
 bool isLeapYear(int anno) {
-    // ritorna 1 se l'anno è bisestile
+    // ritorna true se l'anno è bisestile
     return (((anno % 4 == 0) && (anno % 100 != 0)) || (anno % 400 == 0));
 }
 
