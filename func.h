@@ -51,5 +51,6 @@ int contaAnniBisestili(Data data); // conta il numero di anni bisestili prima di
 unsigned int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
 bool isLeapYear(int anno); // ritorna true se l'anno è bisestile
 bool controllaData(Data data); // funzione che verifica che una data sia valida
+void maiuscolo(char * string, int n); // funzione che riceve una stringa e modifica rendendo tutti i caratteri maiuscoli
 
 #endif

@@ -8,6 +8,8 @@
 #include "func.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <ctype.h>
+#include <string.h>
 
 unsigned int menuPrincipale() {
     printf("%s", "*** MENU PRINCIPALE ***\n"
@@ -77,6 +79,7 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         printf("%s", " Inserisci codice fiscale: ");
         scanf("%16s", account.codiceFiscale);
         fflush(stdin);
+        maiuscolo(account.codiceFiscale, strlen(account.codiceFiscale));
 
         printf("%s", " Inserisci indirizzo di residenza: ");
         scanf(" %29[^\n]", account.indirizzoResidenza);
@@ -406,4 +409,10 @@ bool controllaData(Data data) {
         return (data.giorno <= 30);
     }
     return true;
+}
+
+void maiuscolo(char * string, int n) {
+    for (int i = 0; i < n; i++) {
+        string[i] = toupper(string[i]);
+    }
 }
