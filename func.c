@@ -335,8 +335,6 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
     }
 }
 
-
-
 int contaAnniBisestili(Data data) {
     int anni = data.anno;
     if (data.mese <= 2) anni--; // controlla se l'anno corrente debba essere calcolato o meno
