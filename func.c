@@ -2,7 +2,7 @@
 //  func.c
 //  progettoFondInf
 //
-//  Created by Francesco Paolo Severino and Roberto Giovanni Scolari on 26/12/21.
+//  Created by Francesco Paolo Severino and Roberto Giovanni Scolari on 27/12/21.
 //
 
 #include "func.h"
@@ -20,28 +20,23 @@ unsigned int menuPrincipale() {
         " 5 - Elimina account\n"
         " 6 - Vedi dettagli conto\n"
         " 7 - Uscita\n? ");
-    
     unsigned int sceltaMenu;
-    scanf("%u", &sceltaMenu); // scelta dell'utente
+    scanf("%u", &sceltaMenu);
     fflush(stdin);
     return sceltaMenu;
 }
 
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
     printf("%s", "\nInserisci il numero del nuovo account (1 - 100): ");
-    unsigned int numeroAccount; // numero del conto
+    unsigned int numeroAccount;
     scanf("%u", &numeroAccount);
     fflush(stdin);
-
     // controlla che il numero inserito rientri nei limiti del file
     if (numeroAccount < 1 || numeroAccount > 100) {
         puts(" ERRORE: Scelta non consentita, operazione di aggiunta conto annullata.\n");
         return;
     }
-
-    // sposta il puntatore del file al record corretto nel file
-    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
     // crea DatiAccount con informazioni predefinite
     DatiAccount account = {
         "",
@@ -55,19 +50,13 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         {0, 0, 0},
         0.0
     };
-
-    // leggi il record dal file
-    fread(&account, sizeof(DatiAccount), 1, pFile);
-
-    // stampa un messaggio di errore se il conto esiste già
+    fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
     if (account.numeroConto != 0) {
         printf(" L'account #%u contiene già informazioni.\n\n", account.numeroConto);
     } else /* crea il record */ {
-        // l'utente inserisce i dati
         printf("%s", " Inserisci nome e cognome: ");
         scanf(" %24[^\n]", account.nome);
         fflush(stdin);
-
         printf("%s", " Inserisci data di nascita (gg/mm/aaaa): ");
         scanf("%u/%u/%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
         fflush(stdin);
@@ -75,24 +64,19 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
             puts("  ERRORE: Inserisci una data valida, operazione di aggiunta conto annullata.\n");
             return;
         }
-
         printf("%s", " Inserisci codice fiscale: ");
         scanf("%16s", account.codiceFiscale);
         fflush(stdin);
-        maiuscolo(account.codiceFiscale, strlen(account.codiceFiscale));
-
+        inMaiuscolo(account.codiceFiscale, strlen(account.codiceFiscale));
         printf("%s", " Inserisci indirizzo di residenza: ");
         scanf(" %29[^\n]", account.indirizzoResidenza);
         fflush(stdin);
-
         printf("%s", " Inserisci numero di telefono: ");
         scanf(" %16[^\n]", account.telefono);
         fflush(stdin);
-
         printf("%s", " Inserisci saldo: ");
         scanf("%lf", &account.saldo);
         fflush(stdin);
-
         printf("%s", " Inserisci il tipo di conto:\n"
             "  0 - corrente (interessi: 0%)\n"
             "  1 - deposito (interessi: 1% all'anno)\n"
@@ -128,29 +112,19 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
                 return;
                 break;
         }
-
-        account.dataVersamento.giorno = dataOdierna.giorno;
-        account.dataVersamento.mese = dataOdierna.mese;
-        account.dataVersamento.anno = dataOdierna.anno;
-
+        account.dataAperturaConto.giorno = dataOdierna.giorno;
+        account.dataAperturaConto.mese = dataOdierna.mese;
+        account.dataAperturaConto.anno = dataOdierna.anno;
         account.numeroConto = numeroAccount;
-
-        // sposta il puntatore del file al record corretto nel file
-        fseek(pFile, (account.numeroConto - 1) * sizeof(DatiAccount), SEEK_SET);
-
-        // inserisci il record nel file
-        fwrite(&account, sizeof(DatiAccount), 1, pFile);
-
+        fseek(pFile, (account.numeroConto - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
+        fwrite(&account, sizeof(DatiAccount), 1, pFile); // inserisci il record nel file
         printf("\nNuovo conto (#%u) aggiunto.\n\n", account.numeroConto);
     }
 }
 
 void visualizzaElencoConti(FILE *pFile) {
-    // sposta il puntatore del file all'inizio del file
     rewind(pFile);
-
-    int nAccount = 0; // salva il numero di account letti
-
+    int numeroAccountLetti = 0;
     // leggi tutti i record del file
     while (!feof(pFile)) {
         // crea DatiAccount con informazioni predefinite
@@ -166,35 +140,25 @@ void visualizzaElencoConti(FILE *pFile) {
             {0, 0, 0},
             0.0
         };
-
-        int risultato = fread(&account, sizeof(DatiAccount), 1, pFile);
-
-        // stampa i dati di un account
+        int risultato = fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file e passa eventuali errori
         if (risultato != 0 && account.numeroConto != 0) {
             printf("\nDati dell'account #%u:\n", account.numeroConto);
             printf(" Nome: %s\n", account.nome);
             printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
             printf(" Telefono: %s\n", account.telefono);
-            nAccount++;
+            numeroAccountLetti++;
         }
     }
-
-    if (nAccount == 0) {
-        puts("\nNon ci sono account salvati.");
-    }
-
+    if (numeroAccountLetti == 0) puts("\nNon ci sono account salvati.");
     puts("");
 }
 
 void modificaConto(FILE *pFile) {
     printf("%s", "\nInserisci il numero dell'account da modificare (1 - 100): ");
-    unsigned int numeroAccount; // numero del conto
+    unsigned int numeroAccount;
     scanf("%u", &numeroAccount);
     fflush(stdin);
-
-    // sposta il puntatore del file al record corretto nel file
-    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
     // crea DatiAccount con informazioni predefinite
     DatiAccount account = {
         "",
@@ -208,42 +172,30 @@ void modificaConto(FILE *pFile) {
         {0, 0, 0},
         0.0
     };
-
-    // leggi il record dal file
-    fread(&account, sizeof(DatiAccount), 1, pFile);
-
-    // stampa un messaggio di errore se il conto non esiste
+    fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* modifica il record */ {
         printf("%s", " Inserisci nuovo indirizzo di residenza: ");
         scanf(" %29[^\n]", account.indirizzoResidenza);
         fflush(stdin);
-
         printf("%s", " Inserisci nuovo numero di telefono: ");
         scanf(" %16[^\n]", account.telefono);
         fflush(stdin);
-
-        // sposta il puntatore del file al record corretto nel file
-        fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-
-        // scrivi il record aggiornato al posto del vecchio record nel file
-        fwrite(&account, sizeof(DatiAccount), 1, pFile);
-
+        fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
+        fwrite(&account, sizeof(DatiAccount), 1, pFile); // scrivi il record aggiornato al posto del vecchio record nel file
         printf("\nConto #%u modificato.\n\n", account.numeroConto);
     }
 }
 
 // implementa qui "transazione()"
 
-void eliminaAccount(FILE *pFile) {
+void eliminaAccount(FILE *pFile, Data dataOdierna) {
     printf("%s", "\nInserisci il numero dell'account da eliminare (1 - 100): ");
-    unsigned int numeroAccount; // numero del conto
+    unsigned int numeroAccount;
     scanf("%u", &numeroAccount);
-
-    // sposta il puntatore del file al record corretto nel file
-    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-
+    fflush(stdin);
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
     // crea DatiAccount con informazioni predefinite
     DatiAccount account = {
         "",
@@ -257,46 +209,79 @@ void eliminaAccount(FILE *pFile) {
         {0, 0, 0},
         0.0
     };
-
-    // leggi il record dal file
-    fread(&account, sizeof(DatiAccount), 1, pFile);
-
-    // stampa un messaggio di errore se il conto non esiste
+    fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* cancella il record */ {
-        // sposta il puntatore del file al record corretto nel file
-        fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-
-        // account vuoto
-        DatiAccount accountVuoto = {
-            "",
-            {0, 0, 0},
-            "",
-            "",
-            "",
-            0.0,
-            0,
-            0,
-            {0, 0, 0},
-            0.0
-        };
-
-        // sostituisci il record esistente con il record vuoto
-        fwrite(&accountVuoto, sizeof(DatiAccount), 1, pFile);
-
-        printf("\nConto #%u eliminato.\n\n", account.numeroConto);
+        printf("\nDati dell'account #%u:\n", account.numeroConto);
+        printf(" Nome: %s\n", account.nome);
+        printf(" Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
+        printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
+        printf(" Telefono: %s\n", account.telefono);
+        printf(" Saldo: €%.2lf\n", account.saldo);
+        printf("%s", " Tipo di conto: ");
+        switch (account.tipoConto) {
+            case corrente:
+                puts("corrente");
+                break;
+            case deposito:
+                puts("deposito");
+                break;
+            case fisso1Anno:
+                puts("fisso per 1 anno");
+                break;
+            case fisso2Anni:
+                puts("fisso per 2 anni");
+                break;
+            case fisso3Anni:
+                puts("fisso per 3 anni");
+                break;
+            default:
+                puts("ERRORE");
+                break;
+        }
+        printf(" Data di versamento: %u/%u/%u\n", account.dataAperturaConto.giorno, account.dataAperturaConto.mese, account.dataAperturaConto.anno);
+        // calcola gli interessi
+        double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataAperturaConto, dataOdierna) - account.saldo * anniPassati(account.dataAperturaConto, dataOdierna);
+        printf(" Importo degli interessi: €%.2lf\n\n", importoInteressi);
+        printf("Sei sicuro di voler cancellare l'account #%u? (y = si, n = no)\n? ", account.numeroConto);
+        char conferma = getchar();
+        switch (conferma) {
+            case 'n':
+            case 'N':
+                puts("\nEliminazione annullata.\n");
+                return;
+                break;
+            case 'y':
+            case 'Y':
+                fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
+                DatiAccount accountVuoto = {
+                    "",
+                    {0, 0, 0},
+                    "",
+                    "",
+                    "",
+                    0.0,
+                    0,
+                    0,
+                    {0, 0, 0},
+                    0.0
+                };
+                fwrite(&accountVuoto, sizeof(DatiAccount), 1, pFile); // sostituisci il record esistente con il record vuoto
+                printf("\nConto #%u eliminato.\n\n", account.numeroConto);
+                break;
+            default:
+                puts("\nERRORE: Scegli un'opzione valida, eliminazione annullata.\n");
+                break;
+        }
     }
 }
 
 void vediDettagliConto(FILE *pFile, Data dataOdierna) {
     printf("%s", "\nInserisci il numero dell'account da visionare (1 - 100): ");
-    unsigned int numeroAccount; // numero del conto
+    unsigned int numeroAccount;
     scanf("%u", &numeroAccount);
-
-    // sposta il puntatore del file al record corretto nel file
-    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
     // crea DatiAccount con informazioni predefinite
     DatiAccount account = {
         "",
@@ -310,11 +295,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         {0, 0, 0},
         0.0
     };
-
-    // leggi il record dal file
-    fread(&account, sizeof(DatiAccount), 1, pFile);
-
-    // stampa un messaggio di errore se il conto non esiste
+    fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* stampa i dettagli dell'account */ {
@@ -347,9 +328,9 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
                 break;
         }
         printf(" Numero del conto: %u\n", account.numeroConto);
-        printf(" Data di versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
+        printf(" Data di versamento: %u/%u/%u\n", account.dataAperturaConto.giorno, account.dataAperturaConto.mese, account.dataAperturaConto.anno);
         // calcola gli interessi
-        double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataVersamento, dataOdierna) - account.saldo * anniPassati(account.dataVersamento, dataOdierna);
+        double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataAperturaConto, dataOdierna) - account.saldo * anniPassati(account.dataAperturaConto, dataOdierna);
         printf(" Importo degli interessi: €%.2lf\n\n", importoInteressi);
     }
 }
@@ -358,14 +339,11 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
 
 int contaAnniBisestili(Data data) {
     int anni = data.anno;
-    // controlla se l'anno corrente debba essere calcolato o meno
-    if (data.mese <= 2) anni--;
-    // un anno è bisestile se è non secolare e divisibile per 4 o secolare e divisibile per 400
-    return anni / 4 - anni / 100 + anni / 400;
+    if (data.mese <= 2) anni--; // controlla se l'anno corrente debba essere calcolato o meno
+    return anni / 4 - anni / 100 + anni / 400; // un anno è bisestile se è non secolare e divisibile per 4 o secolare e divisibile per 400
 }
 
 unsigned int anniPassati(Data primaData, Data secondaData) {
-    // numero di giorni in ogni mese
     const int giorniMese[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     // conta giorni dalla prima data all'anno zero
     unsigned int n1 = primaData.anno * 365 + primaData.giorno;
@@ -388,12 +366,10 @@ unsigned int anniPassati(Data primaData, Data secondaData) {
 }
 
 bool isLeapYear(int anno) {
-    // ritorna true se l'anno è bisestile
-    return (((anno % 4 == 0) && (anno % 100 != 0)) || (anno % 400 == 0));
+    return (((anno % 4 == 0) && (anno % 100 != 0)) || (anno % 400 == 0)); // ritorna true se l'anno è bisestile
 }
 
 bool controllaData(Data data) {
-    // controlla il range degli anni, mesi e giorni
     if (data.anno > 2070 || data.anno < 1900) return false;
         // usando il tipo unsigned int nella funzione anniPassati() non dovrebbe essere possibile calcolare più di circa 179 anni di differenza
     if (data.mese < 1 || data.mese > 12) return false;
@@ -411,7 +387,7 @@ bool controllaData(Data data) {
     return true;
 }
 
-void maiuscolo(char * string, int n) {
+void inMaiuscolo(char * string, int n) {
     for (int i = 0; i < n; i++) {
         string[i] = toupper(string[i]);
     }
