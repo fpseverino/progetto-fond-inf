@@ -62,7 +62,7 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         fflush(stdin);
 
         printf("%s", " Inserisci data di nascita (gg/mm/aaaa): ");
-        scanf("%u/%u/%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
+        scanf("%u%*c%u%*c%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
         fflush(stdin);
         if (!controllaData(account.dataNascita)) {
             puts("  ERRORE: Inserisci una data valida, operazione di aggiunta conto annullata.\n");
@@ -235,7 +235,7 @@ void eliminaAccount(FILE *pFile, Data dataOdierna) {
         printf(" Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
         printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
         printf(" Telefono: %s\n", account.telefono);
-        printf(" Saldo: €%.2lf\n", account.saldo);
+        printf(" Saldo: %.2lf\n", account.saldo);
         printf("%s", " Tipo di conto: ");
         switch (account.tipoConto) {
             case corrente:
@@ -260,7 +260,7 @@ void eliminaAccount(FILE *pFile, Data dataOdierna) {
         printf(" Data di versamento: %u/%u/%u\n", account.dataAperturaConto.giorno, account.dataAperturaConto.mese, account.dataAperturaConto.anno);
         // calcola gli interessi
         double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataAperturaConto, dataOdierna) - account.saldo * anniPassati(account.dataAperturaConto, dataOdierna);
-        printf(" Importo degli interessi: €%.2lf\n\n", importoInteressi);
+        printf(" Importo degli interessi: %.2lf\n\n", importoInteressi);
 
         printf("Sei sicuro di voler cancellare l'account #%u? (y = si, n = no)\n? ", account.numeroConto);
         char conferma = getchar();
@@ -324,7 +324,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         printf(" Codice fiscale: %s\n", account.codiceFiscale);
         printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
         printf(" Telefono: %s\n", account.telefono);
-        printf(" Saldo: €%.2lf\n", account.saldo);
+        printf(" Saldo: %.2lf\n", account.saldo);
         printf("%s", " Tipo di conto: ");
         switch (account.tipoConto) {
             case corrente:
@@ -350,7 +350,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         printf(" Data di versamento: %u/%u/%u\n", account.dataAperturaConto.giorno, account.dataAperturaConto.mese, account.dataAperturaConto.anno);
         // calcola gli interessi
         double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataAperturaConto, dataOdierna) - account.saldo * anniPassati(account.dataAperturaConto, dataOdierna);
-        printf(" Importo degli interessi: €%.2lf\n\n", importoInteressi);
+        printf(" Importo degli interessi: %.2lf\n\n", importoInteressi);
     }
 }
 
