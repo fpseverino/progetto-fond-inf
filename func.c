@@ -58,7 +58,7 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         printf(" L'account #%u contiene già informazioni.\n\n", account.numeroConto);
     } else /* crea il record */ {
         printf("%s", " Inserisci nome e cognome: ");
-        scanf(" %24[^\n]", account.nome);
+        scanf("%24[^\n]", account.nome);
         fflush(stdin);
 
         printf("%s", " Inserisci data di nascita (gg/mm/aaaa): ");
@@ -75,11 +75,11 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         inMaiuscolo(account.codiceFiscale, strlen(account.codiceFiscale));
 
         printf("%s", " Inserisci indirizzo di residenza: ");
-        scanf(" %29[^\n]", account.indirizzoResidenza);
+        scanf("%29[^\n]", account.indirizzoResidenza);
         fflush(stdin);
 
         printf("%s", " Inserisci numero di telefono: ");
-        scanf(" %16[^\n]", account.telefono);
+        scanf("%16[^\n]", account.telefono);
         fflush(stdin);
 
         printf("%s", " Inserisci saldo: ");
@@ -154,10 +154,10 @@ void visualizzaElencoConti(FILE *pFile) {
         };
         int risultato = fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file e passa eventuali errori
         if (risultato != 0 && account.numeroConto != 0) {
-            printf("\nDati dell'account #%u:\n", account.numeroConto);
-            printf(" Nome: %s\n", account.nome);
-            printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
-            printf(" Telefono: %s\n", account.telefono);
+            printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
+            printf("%-27s%s\n", " Nome: ", account.nome);
+            printf("%-27s%s\n", " Indirizzo di residenza: ", account.indirizzoResidenza);
+            printf("%-27s%s\n", " Telefono: ", account.telefono);
             numeroAccountLetti++;
         }
     }
@@ -190,11 +190,11 @@ void modificaConto(FILE *pFile) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* modifica il record */ {
         printf("%s", " Inserisci nuovo indirizzo di residenza: ");
-        scanf(" %29[^\n]", account.indirizzoResidenza);
+        scanf("%29[^\n]", account.indirizzoResidenza);
         fflush(stdin);
 
         printf("%s", " Inserisci nuovo numero di telefono: ");
-        scanf(" %16[^\n]", account.telefono);
+        scanf("%16[^\n]", account.telefono);
         fflush(stdin);
 
         fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
@@ -230,13 +230,14 @@ void eliminaAccount(FILE *pFile, Data dataOdierna) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* cancella il record */ {
         // prima stampa i dati dell'account per sicurezza dell'utente
-        printf("\nDati dell'account #%u:\n", account.numeroConto);
-        printf(" Nome: %s\n", account.nome);
-        printf(" Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
-        printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
-        printf(" Telefono: %s\n", account.telefono);
-        printf(" Saldo: %.2lf\n", account.saldo);
-        printf("%s", " Tipo di conto: ");
+        printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
+        printf("%-27s%s\n", " Nome: ", account.nome);
+        printf("%-27s%u/%u/%u\n", " Data di nascita: ", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
+        printf("%-27s%s\n", " Codice fiscale: ", account.codiceFiscale);
+        printf("%-27s%s\n", " Indirizzo di residenza: ", account.indirizzoResidenza);
+        printf("%-27s%s\n", " Telefono: ", account.telefono);
+        printf("%-27s%.2lf\n", " Saldo: ", account.saldo);
+        printf("%-27s", " Tipo di conto: ");
         switch (account.tipoConto) {
             case corrente:
                 puts("corrente");
@@ -257,10 +258,11 @@ void eliminaAccount(FILE *pFile, Data dataOdierna) {
                 puts("ERRORE");
                 break;
         }
-        printf(" Data di versamento: %u/%u/%u\n", account.dataAperturaConto.giorno, account.dataAperturaConto.mese, account.dataAperturaConto.anno);
+        printf("%-27s%u\n", " Numero del conto: ", account.numeroConto);
+        printf("%-27s%u/%u/%u\n", " Data di versamento: ", account.dataAperturaConto.giorno, account.dataAperturaConto.mese, account.dataAperturaConto.anno);
         // calcola gli interessi
         double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataAperturaConto, dataOdierna) - account.saldo * anniPassati(account.dataAperturaConto, dataOdierna);
-        printf(" Importo degli interessi: %.2lf\n\n", importoInteressi);
+        printf("%-27s%.2lf\n\n", " Importo degli interessi: ", importoInteressi);
 
         printf("Sei sicuro di voler cancellare l'account #%u? (y = si, n = no)\n? ", account.numeroConto);
         char conferma = getchar();
@@ -318,14 +320,14 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* stampa i dettagli dell'account */ {
-        printf("\nDati dell'account #%u:\n", account.numeroConto);
-        printf(" Nome: %s\n", account.nome);
-        printf(" Data di nascita: %u/%u/%u\n", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
-        printf(" Codice fiscale: %s\n", account.codiceFiscale);
-        printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
-        printf(" Telefono: %s\n", account.telefono);
-        printf(" Saldo: %.2lf\n", account.saldo);
-        printf("%s", " Tipo di conto: ");
+        printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
+        printf("%-27s%s\n", " Nome: ", account.nome);
+        printf("%-27s%u/%u/%u\n", " Data di nascita: ", account.dataNascita.giorno, account.dataNascita.mese, account.dataNascita.anno);
+        printf("%-27s%s\n", " Codice fiscale: ", account.codiceFiscale);
+        printf("%-27s%s\n", " Indirizzo di residenza: ", account.indirizzoResidenza);
+        printf("%-27s%s\n", " Telefono: ", account.telefono);
+        printf("%-27s%.2lf\n", " Saldo: ", account.saldo);
+        printf("%-27s", " Tipo di conto: ");
         switch (account.tipoConto) {
             case corrente:
                 puts("corrente");
@@ -346,11 +348,11 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
                 puts("ERRORE");
                 break;
         }
-        printf(" Numero del conto: %u\n", account.numeroConto);
-        printf(" Data di versamento: %u/%u/%u\n", account.dataAperturaConto.giorno, account.dataAperturaConto.mese, account.dataAperturaConto.anno);
+        printf("%-27s%u\n", " Numero del conto: ", account.numeroConto);
+        printf("%-27s%u/%u/%u\n", " Data di versamento: ", account.dataAperturaConto.giorno, account.dataAperturaConto.mese, account.dataAperturaConto.anno);
         // calcola gli interessi
         double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataAperturaConto, dataOdierna) - account.saldo * anniPassati(account.dataAperturaConto, dataOdierna);
-        printf(" Importo degli interessi: %.2lf\n\n", importoInteressi);
+        printf("%-27s%.2lf\n\n", " Importo degli interessi: ", importoInteressi);
     }
 }
 
