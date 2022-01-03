@@ -44,8 +44,7 @@ void modificaConto(FILE *pFile);
 void eliminaAccount(FILE *pFile, Data dataOdierna);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
 
-int contaAnniBisestili(Data data); // conta il numero di anni bisestili prima di una data
-unsigned int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
+int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
 bool isLeapYear(int anno);
 bool controllaData(Data data); // funzione che verifica che una data sia valida
 void inMaiuscolo(char * string, int n); // funzione che riceve una stringa e la modifica rendendo tutti i caratteri maiuscoli
