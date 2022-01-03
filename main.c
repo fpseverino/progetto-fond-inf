@@ -60,15 +60,13 @@ int main() {
                         break;
                 case 3: modificaConto(pAccountFile);
                         break;
-                case 4: // transazione(pAccountFile, oggi);
-                        puts("\nTransazione: Work in progress\n");
+                case 4: /* transazione(pAccountFile, oggi); */ puts("\nTransazione: Work in progress\n");
                         break;
                 case 5: eliminaAccount(pAccountFile, oggi);
                         break;
                 case 6: vediDettagliConto(pAccountFile, oggi);
                         break;
-                default: // scelta non valida
-                        puts("\nERRORE: Scegli un'opzione dal menù.\n");
+                default: /* scelta non valida */ puts("\nERRORE: Scegli un'opzione dal menù.\n");
                         break;
             }    
         }
