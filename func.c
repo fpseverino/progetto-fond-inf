@@ -288,7 +288,9 @@ void transazione(FILE *pFile) {
 
 
             }
+
         }
+        fclose(pFile);  
     }
 }
 
