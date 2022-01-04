@@ -231,8 +231,10 @@ void modificaConto(FILE *pFile) {
     }
 }
 
-void transazione(FILE *pFile) {
+void transazione(FILE *pFile) 
+{
     FILE *ptrTra;
+    Data oggi;
     printf("%s", "\nInserisci il numero dell'account (1 - 100): ");
     unsigned int sce;//input switch
     float soldi;//importo 
@@ -266,13 +268,16 @@ void transazione(FILE *pFile) {
     } else {
         printf(" Saldo Disponibile: %.2lf\n", account.saldo);//mostra saldo disponibile
         printf("\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
-        while(sce != 4)
+        ptrTra=fopen("transazioni.txt","a+");
+        if (ptrTra)
+     {
+          while(sce != 4)
         {
             scanf("%u",&sce);
             switch (sce)
             {
                 case 1://deposito
-                printf("Importo da depositare : ");
+                 printf("Importo da depositare : ");
                 scanf("%f",&soldi);
                 if(soldi < 0)
                 {
@@ -281,9 +286,13 @@ void transazione(FILE *pFile) {
                 }
                 else{
                 account.saldo = account.saldo + soldi;
+                // sposta il puntatore del file al record corretto nel file
+                fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
                 fwrite(&account, sizeof(DatiAccount), 1, pFile);//aggiornamento record
                 printf("\nIl deposito e' andato a bun fine. \n Saldo disponibile: %.2lf\n", account.saldo);
                 printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");}
+                fprintf(ptrTra,"Conto #%u\nTransazione Tipo: DEPOSITO\nImporto: %.2f\nIn Data: %u/%u/%u\n", numeroAccount, soldi,oggi.giorno,oggi.mese,oggi.anno);
+                fprintf(ptrTra,"---------------------------------\n");
                     break;
                 case 2://prelievo
                 printf("\nImporto da prelevare: ");
@@ -293,24 +302,36 @@ void transazione(FILE *pFile) {
                     printf("ERRORE: inserisci un valore corretto");
                     printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?"); 
                 }
+                else if (soldi > account.saldo)
+                {
+                    printf("ERRORE: inserisci un valore corretto");
+                    printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?"); 
+                }
                 else{
                 account.saldo = account.saldo - soldi;
                 fwrite(&account, sizeof(DatiAccount), 1, pFile);//aggiornamento record
+                // sposta il puntatore del file al record corretto nel file
+                fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
                 printf("\nIl prelievo e' andato a bun fine. \n Saldo disponibile: %.2lf\n", account.saldo);
+                fprintf(ptrTra,"Conto #%u\nTransazione Tipo: PRELIEVO\nImporto: %.2f\nIn Data: %u\n", numeroAccount, soldi,oggi.giorno);
+                fprintf(ptrTra,"---------------------------------\n");
                 printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");}
                     break;
                 case 3://bonifico
                     break;
+                case 4://uscita
+                    break;
                  default: // scelta non valida
-                        printf("\nERRORE: Scegli un'opzione dal menù.\n");
+                        printf("\nERRORE: Scegli un'opzione dal menu'.\n");
+                        printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
                         break;
-
-
             }
-        
+        }
+      
         }
           
     }
+    fclose(ptrTra);
 }
 
 void eliminaAccount(FILE *pFile) {
