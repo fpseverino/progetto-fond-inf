@@ -231,7 +231,66 @@ void modificaConto(FILE *pFile) {
     }
 }
 
-// implementa qui "transazione()"
+void transazione(FILE *pFile) {
+    FILE *ptrTra;
+    printf("%s", "\nInserisci il numero dell'account (1 - 100): ");
+    unsigned int sce;//input switch
+    unsigned int soldi;//importo 
+    unsigned int numeroAccount; // numero del conto
+    scanf("%u", &numeroAccount);
+    fflush(stdin);
+
+    // sposta il puntatore del file al record corretto nel file
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+
+    // crea DatiAccount con informazioni predefinite
+    DatiAccount account = {
+        "",
+        {0, 0, 0},
+        "",
+        "",
+        "",
+        0.0,
+        0,
+        0,
+        {0, 0, 0},
+        0.0
+    };
+
+    // leggi il record dal file
+    fread(&account, sizeof(DatiAccount), 1, pFile);
+
+    // stampa un messaggio di errore se il conto non esiste
+    if (account.numeroConto == 0) {
+        printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
+    } else {
+        printf(" Saldo Disponibile: %.2lf\n", account.saldo);//mostra saldo disponibile
+        printf("\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
+        while(sce != 4)
+        {
+            scanf("%u",&sce);
+            switch (sce)
+            {
+                case 1:
+                printf("Importo da depositare : ");
+                scanf("%u",&soldi);
+                account.saldo = account.saldo + soldi;
+                printf("\nIl deposito e' andato a bun fine. \n Saldo disponibile: %.2lf\n", account.saldo);
+                printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
+                break;
+                case 2:
+                printf("\nImporto da prelevare: ");
+                scanf("%u",&soldi);
+                account.saldo = account.saldo - soldi;
+                printf("\nIl prelievo e' andato a bun fine. \n Saldo disponibile: %.2lf\n", account.saldo);
+                printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
+                break;
+
+
+            }
+        }
+    }
+}
 
 void eliminaAccount(FILE *pFile) {
     printf("%s", "\nInserisci il numero dell'account da eliminare (1 - 100): ");
@@ -321,7 +380,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         printf(" Codice fiscale: %s\n", account.codiceFiscale);
         printf(" Indirizzo di residenza: %s\n", account.indirizzoResidenza);
         printf(" Telefono: %s\n", account.telefono);
-        printf(" Saldo: €%.2lf\n", account.saldo);
+        printf(" Saldo: %.2lf\n", account.saldo);
         printf("%s", " Tipo di conto: ");
         switch (account.tipoConto) {
             case corrente:
@@ -347,7 +406,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         printf(" Data di versamento: %u/%u/%u\n", account.dataVersamento.giorno, account.dataVersamento.mese, account.dataVersamento.anno);
         // calcola gli interessi
         double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataVersamento, dataOdierna) - account.saldo * anniPassati(account.dataVersamento, dataOdierna);
-        printf(" Importo degli interessi: €%.2lf\n\n", importoInteressi);
+        printf(" Importo degli interessi: %.2lf\n\n", importoInteressi);
     }
 }
 

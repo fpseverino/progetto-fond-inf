@@ -63,8 +63,7 @@ int main() {
                         break;
                 case 3: modificaConto(pAccountFile);
                         break;
-                case 4: // transazione(pAccountFile, oggi);
-                        puts("\nTransazione: Work in progress\n");
+                case 4: transazione(pAccountFile);
                         break;
                 case 5: eliminaAccount(pAccountFile);
                         break;
