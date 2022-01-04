@@ -235,7 +235,7 @@ void transazione(FILE *pFile) {
     FILE *ptrTra;
     printf("%s", "\nInserisci il numero dell'account (1 - 100): ");
     unsigned int sce;//input switch
-    unsigned int soldi;//importo 
+    float soldi;//importo 
     unsigned int numeroAccount; // numero del conto
     scanf("%u", &numeroAccount);
     fflush(stdin);
@@ -271,26 +271,45 @@ void transazione(FILE *pFile) {
             scanf("%u",&sce);
             switch (sce)
             {
-                case 1:
+                case 1://deposito
                 printf("Importo da depositare : ");
-                scanf("%u",&soldi);
+                scanf("%f",&soldi);
+                if(soldi < 0)
+                {
+                    printf("ERRORE: inserisci un valore corretto");
+                    printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
+                }
+                else{
                 account.saldo = account.saldo + soldi;
+                fwrite(&account, sizeof(DatiAccount), 1, pFile);//aggiornamento record
                 printf("\nIl deposito e' andato a bun fine. \n Saldo disponibile: %.2lf\n", account.saldo);
-                printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
-                break;
-                case 2:
+                printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");}
+                    break;
+                case 2://prelievo
                 printf("\nImporto da prelevare: ");
-                scanf("%u",&soldi);
+                scanf("%f",&soldi);
+                if (soldi < 0)
+                {
+                    printf("ERRORE: inserisci un valore corretto");
+                    printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?"); 
+                }
+                else{
                 account.saldo = account.saldo - soldi;
+                fwrite(&account, sizeof(DatiAccount), 1, pFile);//aggiornamento record
                 printf("\nIl prelievo e' andato a bun fine. \n Saldo disponibile: %.2lf\n", account.saldo);
-                printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
-                break;
+                printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");}
+                    break;
+                case 3://bonifico
+                    break;
+                 default: // scelta non valida
+                        printf("\nERRORE: Scegli un'opzione dal menù.\n");
+                        break;
 
 
             }
-
+        
         }
-        fclose(pFile);  
+          
     }
 }
 
