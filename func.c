@@ -309,11 +309,11 @@ void transazione(FILE *pFile, Data oggi)
                 }
                 else{
                 account.saldo = account.saldo - soldi;
-                fwrite(&account, sizeof(DatiAccount), 1, pFile);//aggiornamento record
                 // sposta il puntatore del file al record corretto nel file
                 fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+                fwrite(&account, sizeof(DatiAccount), 1, pFile);//aggiornamento record
                 printf("\nIl prelievo e' andato a bun fine. \n Saldo disponibile: %.2lf\n", account.saldo);
-                fprintf(ptrTra,"Conto #%u\nTransazione Tipo: PRELIEVO\nImporto: %.2f\nIn Data: %u\n", numeroAccount, soldi,oggi.giorno);
+                fprintf(ptrTra,"Conto #%u\nTransazione Tipo: PRELIEVO\nImporto: %.2f\nIn Data: %u/%u/%u\n", numeroAccount, soldi,oggi.giorno, oggi.mese, oggi.anno);
                 fprintf(ptrTra,"---------------------------------\n");
                 printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");}
                     break;
