@@ -455,7 +455,7 @@ void elencotransazioni()
 {
     FILE *ptrTra;
     char elenco[50];
-    ptrTra=fopen("transazini.txt","r");
+    ptrTra=fopen("transazioni.txt","r");
     if (ptrTra)
     {
         while (!feof(ptrTra))
