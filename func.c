@@ -231,10 +231,9 @@ void modificaConto(FILE *pFile) {
     }
 }
 
-void transazione(FILE *pFile) 
+void transazione(FILE *pFile, Data oggi) 
 {
     FILE *ptrTra;
-    Data oggi;
     printf("%s", "\nInserisci il numero dell'account (1 - 100): ");
     unsigned int sce;//input switch
     float soldi;//importo 
@@ -319,7 +318,7 @@ void transazione(FILE *pFile)
                     break;
                 case 3://bonifico
                     break;
-                case 4://uscita
+                case 4://esci
                     break;
                  default: // scelta non valida
                         printf("\nERRORE: Scegli un'opzione dal menu'.\n");
@@ -450,6 +449,22 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         double importoInteressi = account.interessi * account.saldo * anniPassati(account.dataVersamento, dataOdierna) - account.saldo * anniPassati(account.dataVersamento, dataOdierna);
         printf(" Importo degli interessi: %.2lf\n\n", importoInteressi);
     }
+}
+void elencotransazioni(FILE *ptrTra)
+{
+    FILE *ptrTra;
+    char elenco[50];
+    ptrTra=fopen("transazini.txt","r");
+    if (ptrTra)
+    {
+        while (!feof(ptrTra))
+        {
+            
+        }
+        
+    }
+    
+
 }
 
 

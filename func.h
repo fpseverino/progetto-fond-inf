@@ -43,7 +43,7 @@ unsigned int menuPrincipale();
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoConti(FILE *pFile);
 void modificaConto(FILE *pFile);
-void transazione(FILE *pFile);
+void transazione(FILE *pFile, Data oggi);
 void eliminaAccount(FILE *pFile);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
 
