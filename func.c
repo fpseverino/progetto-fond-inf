@@ -17,7 +17,8 @@ unsigned int menuPrincipale() {
         " 4 - Transazione\n"
         " 5 - Elimina account\n"
         " 6 - Vedi dettagli conto\n"
-        " 7 - Uscita\n? ");
+        " 7 - Vedi elenco transazioni\n"
+        " 8 - Esci\n?");
     
     unsigned int sceltaMenu;
     scanf("%u", &sceltaMenu); // scelta dell'utente
@@ -450,7 +451,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         printf(" Importo degli interessi: %.2lf\n\n", importoInteressi);
     }
 }
-void elencotransazioni(FILE *ptrTra)
+void elencotransazioni()
 {
     FILE *ptrTra;
     char elenco[50];
@@ -459,12 +460,15 @@ void elencotransazioni(FILE *ptrTra)
     {
         while (!feof(ptrTra))
         {
-            
+           fgets(elenco,50,ptrTra);
+           printf("%s", elenco);
         }
         
     }
-    
-
+    else{
+        printf("ERRORE, Impossibile aprire il file\n");
+    }
+    fclose(ptrTra);
 }
 
 

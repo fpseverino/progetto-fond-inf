@@ -55,7 +55,7 @@ int main() {
 
         unsigned int scelta; // scelta dell'utente
         // consenti all'utente di specificare l'azione
-        while ((scelta = menuPrincipale()) != 7) {
+        while ((scelta = menuPrincipale()) != 8) {
             switch (scelta) {
                 case 1: aggiungiNuovoConto(pAccountFile, oggi);
                         break;
@@ -69,6 +69,9 @@ int main() {
                         break;
                 case 6: vediDettagliConto(pAccountFile, oggi);
                         break;
+                case 7: elencotransazioni();
+                        break;
+
                 default: // scelta non valida
                         puts("\nERRORE: Scegli un'opzione dal menù.\n");
                         break;

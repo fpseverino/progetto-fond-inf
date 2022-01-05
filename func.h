@@ -46,6 +46,7 @@ void modificaConto(FILE *pFile);
 void transazione(FILE *pFile, Data oggi);
 void eliminaAccount(FILE *pFile);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
+void elencotransazioni();
 
 int contaAnniBisestili(Data data); // conta il numero di anni bisestili prima di una data
 unsigned int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
