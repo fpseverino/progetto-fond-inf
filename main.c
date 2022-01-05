@@ -65,7 +65,7 @@ int main() {
                         break;
                 case 4: transazione(pAccountFile, oggi);
                         break;
-                case 5: eliminaAccount(pAccountFile);
+                case 5: eliminaAccount(pAccountFile, oggi);
                         break;
                 case 6: vediDettagliConto(pAccountFile, oggi);
                         break;
