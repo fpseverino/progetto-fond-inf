@@ -69,9 +69,8 @@ int main() {
                         break;
                 case 6: vediDettagliConto(pAccountFile, oggi);
                         break;
-                case 7: elencoTransazioni();
+                case 7: visualizzaElencoTransazioni();
                         break;
-
                 default: // scelta non valida
                         puts("\nERRORE: Scegli un'opzione dal menù.\n");
                         break;
