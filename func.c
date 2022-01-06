@@ -206,9 +206,9 @@ void modificaConto(FILE *pFile) {
 
 void transazione(FILE *pFile, Data oggi) {
     FILE *ptrTra;
-    printf("%s", "\nInserisci il numero dell'account (1 - 100): ");
-    unsigned int sce;//input switch
-    float soldi;//importo 
+    printf("%s", "\nInserisci il numero dell'account su cui operare (1 - 100): ");
+    unsigned int sce; // input switch
+    double soldi; // importo 
     unsigned int numeroAccount; // numero del conto
     scanf("%u", &numeroAccount);
     fflush(stdin);
@@ -237,38 +237,38 @@ void transazione(FILE *pFile, Data oggi) {
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else {
-        printf(" Saldo Disponibile: %.2lf\n", account.saldo);//mostra saldo disponibile
-        printf("\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
-        ptrTra=fopen("transazioni.txt","a+");
+        printf(" Saldo Disponibile: %.2lf\n", account.saldo); // mostra saldo disponibile
+        printf("\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n? ");
+        ptrTra = fopen("transazioni.txt", "a+");
         if (ptrTra) {
             while(sce != 4) {
                 scanf("%u",&sce);
                 switch (sce) {
                     case 1: // deposito
                         printf("Importo da depositare : ");
-                        scanf("%f",&soldi);
+                        scanf("%lf",&soldi);
                         if(soldi < 0) {
                             printf("ERRORE: inserisci un valore corretto");
-                            printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
+                            printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n? ");
                         } else {
                             account.saldo = account.saldo + soldi;
                             // sposta il puntatore del file al record corretto nel file
                             fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
                             fwrite(&account, sizeof(DatiAccount), 1, pFile);//aggiornamento record
-                            printf("\nIl deposito e' andato a bun fine. \n Saldo disponibile: %.2lf\n", account.saldo);
-                            printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
+                            printf("\nIl deposito e' andato a buon fine. \n Saldo disponibile: %.2lf\n", account.saldo);
+                            printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n? ");
                         }
-                        fprintf(ptrTra,"Conto #%u\nTransazione Tipo: DEPOSITO\nImporto: %.2f\nIn Data: %u/%u/%u\n", numeroAccount, soldi,oggi.giorno,oggi.mese,oggi.anno);
-                        fprintf(ptrTra,"---------------------------------\n");
+                        fprintf(ptrTra, "Conto #%u\nTransazione Tipo: DEPOSITO\nImporto: %.2f\nIn Data: %u/%u/%u\n", numeroAccount, soldi, oggi.giorno, oggi.mese, oggi.anno);
+                        fprintf(ptrTra, "---------------------------------\n");
                         break;
                     case 2: // prelievo
                         printf("\nImporto da prelevare: ");
-                        scanf("%f",&soldi);
+                        scanf("%lf",&soldi);
                         if (soldi < 0) {
-                            printf("ERRORE: inserisci un valore corretto");
+                            printf(" ERRORE: inserisci un valore corretto");
                             printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?"); 
                         } else if (soldi > account.saldo) {
-                            printf("ERRORE: inserisci un valore corretto");
+                            printf(" ERRORE: inserisci un valore corretto");
                             printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?"); 
                         } else {
                             account.saldo = account.saldo - soldi;
@@ -276,8 +276,8 @@ void transazione(FILE *pFile, Data oggi) {
                             fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
                             fwrite(&account, sizeof(DatiAccount), 1, pFile);//aggiornamento record
                             printf("\nIl prelievo e' andato a bun fine. \n Saldo disponibile: %.2lf\n", account.saldo);
-                            fprintf(ptrTra,"Conto #%u\nTransazione Tipo: PRELIEVO\nImporto: %.2f\nIn Data: %u/%u/%u\n", numeroAccount, soldi,oggi.giorno, oggi.mese, oggi.anno);
-                            fprintf(ptrTra,"---------------------------------\n");
+                            fprintf(ptrTra, "Conto #%u\nTransazione Tipo: PRELIEVO\nImporto: %.2f\nIn Data: %u/%u/%u\n", numeroAccount, soldi, oggi.giorno, oggi.mese, oggi.anno);
+                            fprintf(ptrTra, "---------------------------------\n");
                             printf("\nCosa vuoi fare?\n1 - Deposito\n2 - Prelievo \n3 - Bonifico\n4 - Esci\n?");
                         }
                         break;
@@ -447,17 +447,17 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
     }
 }
 
-void elencotransazioni() {
+void elencoTransazioni() {
     FILE *ptrTra;
     char elenco[50];
-    ptrTra=fopen("transazioni.txt","r");
+    ptrTra = fopen("transazioni.txt","r");
     if (ptrTra) {
         while (!feof(ptrTra)) {
-           fgets(elenco,50,ptrTra);
+           fgets(elenco, 50, ptrTra);
            printf("%s", elenco);
         }
     } else {
-        printf("ERRORE, Impossibile aprire il file\n");
+        printf("ERRORE: Impossibile aprire il file\n");
     }
     fclose(ptrTra);
 }

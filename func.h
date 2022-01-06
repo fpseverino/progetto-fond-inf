@@ -43,7 +43,7 @@ void modificaConto(FILE *pFile);
 void transazione(FILE *pFile, Data oggi);
 void eliminaAccount(FILE *pFile, Data dataOdierna);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
-void elencotransazioni();
+void elencoTransazioni();
 
 int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
 bool isLeapYear(int anno);
