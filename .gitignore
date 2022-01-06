@@ -60,7 +60,7 @@ dkms.conf
 *.dat
 *.txt
 
-# Xcode
+# Mac
 .DS_Store
 
 # VS Code
