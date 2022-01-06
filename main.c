@@ -44,7 +44,7 @@ int main() {
         // inserisci la data attuale da usare nelle varie funzioni
         printf("%s", "\nCiao! Inserisci la data di oggi (gg/mm/aaaa): ");
         Data oggi;
-        scanf("%u/%u/%u", &oggi.giorno, &oggi.mese, &oggi.anno);
+        scanf("%u%*c%u%*c%u", &oggi.giorno, &oggi.mese, &oggi.anno);
         fflush(stdin);
         // controlla che la data sia valida
         if (!controllaData(oggi)) {
