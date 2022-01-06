@@ -15,7 +15,7 @@ typedef struct {
     unsigned int giorno, mese, anno;
 } Data;
 
-typedef enum { corrente, deposito, fisso1Anno, fisso2Anni, fisso3Anni } TIPO_CONTO;
+typedef enum { corrente = 1, deposito, fisso1Anno, fisso2Anni, fisso3Anni } TIPO_CONTO;
     // corrente:   interessi 0%            (manda e ricevi denaro verso e da altri conti)
     // deposito:   interessi 1% all'anno   (solo deposito e ritiro denaro)
     // fisso1Anno: interessi 2% all'anno   (solo deposito, impossibile ritirare denaro prima di un anno)
@@ -35,18 +35,22 @@ typedef struct {
     double interessi;
 } DatiAccount;
 
+// FUNZIONI PER GESTIONE MENU
 unsigned int menuPrincipale();
-
+unsigned int menuTransazioni(unsigned int numeroAccount);
+// FUNZIONI PRINCIPALI
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoConti(FILE *pFile);
 void modificaConto(FILE *pFile);
-// transazione();
+void transazione(FILE *pFile, Data oggi);
 void eliminaAccount(FILE *pFile, Data dataOdierna);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
-
+void visualizzaElencoTransazioni();
+// FUNZIONI GESTIONE DATE
 int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
 bool isLeapYear(int anno);
 bool controllaData(Data data); // funzione che verifica che una data sia valida
+// ALTRE FUNZIONI
 void inMaiuscolo(char * string, int n); // funzione che riceve una stringa e la modifica rendendo tutti i caratteri maiuscoli
 
 #endif

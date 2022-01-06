@@ -11,6 +11,8 @@
 #include <ctype.h>
 #include <string.h>
 
+// FUNZIONI PER GESTIONE MENU
+
 unsigned int menuPrincipale() {
     printf("%s", "*** MENU PRINCIPALE ***\n"
         " 1 - Aggiungi nuovo conto\n"
@@ -19,12 +21,29 @@ unsigned int menuPrincipale() {
         " 4 - Transazione\n"
         " 5 - Elimina account\n"
         " 6 - Vedi dettagli conto\n"
-        " 7 - Uscita\n? ");
+        " 7 - Visualizza elenco transazioni\n"
+        " 8 - Uscita\n? ");
+
     unsigned int sceltaMenu;
     scanf("%u", &sceltaMenu);
     fflush(stdin);
     return sceltaMenu;
 }
+
+unsigned int menuTransazioni(unsigned int numeroAccount) {
+    printf("*** MENU TRANSAZIONI ***\n"
+        " 1 - Deposito su #%u\n"
+        " 2 - Prelievo da #%u\n"
+        " 3 - Bonifico da #%u a un altro account\n"
+        " 4 - Cambia account\n"
+        " 5 - Uscita\n? ", numeroAccount, numeroAccount, numeroAccount);
+    unsigned int sceltaMenu;
+    scanf("%u", &sceltaMenu);
+    fflush(stdin);
+    return sceltaMenu;
+}
+
+// FUNZIONI PRINCIPALI
 
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
     printf("%s", "\nInserisci il numero del nuovo account (1 - 100): ");
@@ -87,32 +106,32 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         fflush(stdin);
 
         printf("%s", " Inserisci il tipo di conto:\n"
-            "  0 - corrente (interessi: 0%)\n"
-            "  1 - deposito (interessi: 1% all'anno)\n"
-            "  2 - fisso per 1 anno (interessi: 2% all'anno)\n"
-            "  3 - fisso per 2 anni (interessi: 2,5% all'anno)\n"
-            "  4 - fisso per 3 anni (interessi: 3% all'anno)\n ? ");
+            "  1 - corrente (interessi: 0%)\n"
+            "  2 - deposito (interessi: 1% all'anno)\n"
+            "  3 - fisso per 1 anno (interessi: 2% all'anno)\n"
+            "  4 - fisso per 2 anni (interessi: 2,5% all'anno)\n"
+            "  5 - fisso per 3 anni (interessi: 3% all'anno)\n ? ");
         TIPO_CONTO temp;
         scanf("%d", &temp);
         fflush(stdin);
         switch (temp) {
-            case 0:
+            case 1:
                 account.tipoConto = corrente;
                 account.interessi = 1.0;
                 break;
-            case 1:
+            case 2:
                 account.tipoConto = deposito;
                 account.interessi = 1.01;
                 break;
-            case 2:
+            case 3:
                 account.tipoConto = fisso1Anno;
                 account.interessi = 1.02;
                 break;
-            case 3:
+            case 4:
                 account.tipoConto = fisso2Anni;
                 account.interessi = 1.025;
                 break;
-            case 4:
+            case 5:
                 account.tipoConto = fisso3Anni;
                 account.interessi = 1.03;
                 break;
@@ -203,7 +222,133 @@ void modificaConto(FILE *pFile) {
     }
 }
 
-// implementa qui "transazione()"
+void transazione(FILE *pFile, Data oggi) {
+    FILE *ptrTra;
+    printf("%s", "\nInserisci il numero dell'account su cui operare (1 - 100): "); 
+    unsigned int numeroAccount;
+    scanf("%u", &numeroAccount);
+    fflush(stdin);
+
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
+    // crea DatiAccount con informazioni predefinite
+    DatiAccount account = {
+        "",
+        {0, 0, 0},
+        "",
+        "",
+        "",
+        0.0,
+        0,
+        0,
+        {0, 0, 0},
+        0.0
+    };
+    fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
+
+    if (account.numeroConto == 0) {
+        printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
+    } else {
+        if ((ptrTra = fopen("transazioni.txt", "a+")) == NULL) {
+            puts("ERRORE: Il file non può essere aperto.\n");
+        } else {
+            puts("");
+
+            double somma; // importo della transazione
+
+            unsigned int sceltaTransazione; // scelta dell'utente
+            while ((sceltaTransazione = menuTransazioni(account.numeroConto)) != 5) {
+                switch (sceltaTransazione) {
+                    case 1: // deposito
+                        // stampa le informazioni dell'account prima della transazione
+                        printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
+                        printf("%-30s%.2lf\n\n", account.nome, account.saldo);
+
+                        printf("Importo da depositare: ");
+                        scanf("%lf",&somma);
+                        if (somma < 0.0) {
+                            printf(" ERRORE: Inserisci un valore positivo, transazione annullata.");
+                        } else {
+                            account.saldo += somma;
+                            // sposta il puntatore del file al record corretto nel file
+                            fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+                            fwrite(&account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
+
+                            fprintf(ptrTra, " Transazione Tipo: DEPOSITO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account.numeroConto, somma, oggi.giorno, oggi.mese, oggi.anno);
+                            fprintf(ptrTra, "--------------------------------\n");
+
+                            printf("\nIl deposito e' andato a buon fine.\n Saldo dell'account #%u: %.2lf\n\n", account.numeroConto, account.saldo);
+                        }
+                        break;
+
+                    case 2: // prelievo
+                        // stampa le informazioni dell'account prima della transazione
+                        printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
+                        printf("%-30s%.2lf\n\n", account.nome, account.saldo);
+
+                        printf("Importo da prelevare: ");
+                        scanf("%lf",&somma);
+                        if (somma < 0.0) {
+                            printf(" ERRORE: Inserisci un valore positivo.");
+                        } else if (somma > account.saldo) {
+                            printf(" ERRORE: Inserisci un valore minore del saldo totale.");
+                            // NOTA PER ROBERTO: Potremmo dare la possibilità di avere un saldo negativo
+                        } else {
+                            account.saldo -= somma;
+                            // sposta il puntatore del file al record corretto nel file
+                            fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+                            fwrite(&account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
+
+                            fprintf(ptrTra, " Transazione Tipo: PRELIEVO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account.numeroConto, somma, oggi.giorno, oggi.mese, oggi.anno);
+                            fprintf(ptrTra, "--------------------------------\n");
+
+                            printf("\nIl prelievo e' andato a buon fine. \n Saldo dell'account: %.2lf\n\n", account.saldo);
+                        }
+                        break;
+
+                    case 3: // bonifico
+                        puts("\nWork in progress\n");
+                        break;
+
+                    case 4: // cambia account
+                        printf("%s", "\nInserisci il numero del nuovo account su cui operare (1 - 100): "); 
+                        scanf("%u", &numeroAccount);
+                        fflush(stdin);
+
+                        fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
+                        // crea DatiAccount con informazioni predefinite
+                        DatiAccount accountTemp = {
+                            "",
+                            {0, 0, 0},
+                            "",
+                            "",
+                            "",
+                            0.0,
+                            0,
+                            0,
+                            {0, 0, 0},
+                            0.0
+                        };
+
+                        fread(&accountTemp, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
+
+                        if (accountTemp.numeroConto == 0) {
+                            printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
+                        } else {
+                            account = accountTemp;
+                            printf("\nCambio account eseguito con successo (nuovo account: %u).\n\n", account.numeroConto);
+                        }
+                        break;
+
+                    default: // scelta non valida
+                        printf("\nERRORE: Scegli un'opzione dal menù.\n");
+                        break;
+                }
+            }
+            fclose(ptrTra);
+            puts("\nUscita dal menù transazioni.\n");
+        }
+    }
+}
 
 void eliminaAccount(FILE *pFile, Data dataOdierna) {
     printf("%s", "\nInserisci il numero dell'account da eliminare (1 - 100): ");
@@ -356,6 +501,25 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
     }
 }
 
+void visualizzaElencoTransazioni() {
+    FILE *ptrTra;
+    char elementoElenco[50];
+    ptrTra = fopen("transazioni.txt","r");
+    if ((ptrTra = fopen("transazioni.txt","r")) == NULL) {
+        puts("\nERRORE: Impossibile aprire il file.\n");
+    } else {
+        puts("\n---- ELENCO TRANSAZIONI --------");
+        while (!feof(ptrTra)) {
+           fgets(elementoElenco, 50, ptrTra);
+           printf("%s", elementoElenco);
+        }
+        puts("");
+    }
+    fclose(ptrTra);
+}
+
+// FUNZIONI GESTIONE DATE
+
 int anniPassati(Data primaData, Data secondaData) {
     const int giorniMese[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     // conta giorni dalla prima data all'anno zero
@@ -396,6 +560,8 @@ bool controllaData(Data data) {
     }
     return true;
 }
+
+// ALTRE FUNZIONI
 
 void inMaiuscolo(char * string, int n) {
     for (int i = 0; i < n; i++) {
