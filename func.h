@@ -2,7 +2,7 @@
 //  func.h
 //  progettoFondInf
 //
-//  Created by Francesco Paolo Severino and Roberto Giovanni Scolari on 26/12/21.
+//  Created by Francesco Paolo Severino and Roberto Giovanni Scolari on 27/12/21.
 //
 
 #ifndef func_h

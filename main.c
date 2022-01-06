@@ -2,7 +2,7 @@
 //  main.c
 //  progettoFondInf
 //
-//  Created by Francesco Paolo Severino and Roberto Giovanni Scolari on 26/12/21.
+//  Created by Francesco Paolo Severino and Roberto Giovanni Scolari on 27/12/21.
 //
 
 #include <stdio.h>
@@ -16,7 +16,6 @@ int main() {
         if ((pAccountFile = fopen("accounts.dat", "wb")) == NULL) {
             puts("ERRORE: Il file non può essere aperto.");
         } else {
-            // crea DatiAccount con informazioni predefinite
             DatiAccount accountVuoto = {
                 "",
                 {0, 0, 0},
@@ -37,11 +36,9 @@ int main() {
         }
     }
 
-    // fopen apre il file per l'aggiornamento in forma binaria
     if ((pAccountFile = fopen("accounts.dat", "rb+")) == NULL) {
         puts("ERRORE: Il file non può essere aperto.");
     } else {
-        // inserisci la data attuale da usare nelle varie funzioni
         printf("%s", "\nCiao! Inserisci la data di oggi (gg/mm/aaaa): ");
         Data oggi;
         scanf("%u%*c%u%*c%u", &oggi.giorno, &oggi.mese, &oggi.anno);
@@ -52,8 +49,8 @@ int main() {
             return 0;
         }
         puts("");
-
-        unsigned int scelta; // scelta dell'utente
+        
+        unsigned int scelta;
         // consenti all'utente di specificare l'azione
         while ((scelta = menuPrincipale()) != 8) {
             switch (scelta) {
@@ -71,8 +68,7 @@ int main() {
                         break;
                 case 7: visualizzaElencoTransazioni();
                         break;
-                default: // scelta non valida
-                        puts("\nERRORE: Scegli un'opzione dal menù.\n");
+                default: /* scelta non valida */ puts("\nERRORE: Scegli un'opzione dal menù.\n");
                         break;
             }    
         }

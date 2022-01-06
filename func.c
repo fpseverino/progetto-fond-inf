@@ -2,7 +2,7 @@
 //  func.c
 //  progettoFondInf
 //
-//  Created by Francesco Paolo Severino and Roberto Giovanni Scolari on 26/12/21.
+//  Created by Francesco Paolo Severino and Roberto Giovanni Scolari on 27/12/21.
 //
 
 #include "func.h"
@@ -23,6 +23,7 @@ unsigned int menuPrincipale() {
         " 6 - Vedi dettagli conto\n"
         " 7 - Visualizza elenco transazioni\n"
         " 8 - Uscita\n? ");
+
     unsigned int sceltaMenu;
     scanf("%u", &sceltaMenu);
     fflush(stdin);
@@ -527,7 +528,7 @@ int anniPassati(Data primaData, Data secondaData) {
         n1 += giorniMese[i];
     }
     // conta giorni dalla seconda data all'anno zero
-    unsigned int n2 = secondaData.anno * 365 + secondaData.giorno;
+    int n2 = secondaData.anno * 365 + secondaData.giorno;
     for (int i = 0; i < secondaData.mese - 1; i++) {
         n2 += giorniMese[i];
     }
