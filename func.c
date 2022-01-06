@@ -8,6 +8,8 @@
 #include "func.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <ctype.h>
+#include <string.h>
 
 unsigned int menuPrincipale() {
     printf("%s", "*** MENU PRINCIPALE ***\n"
