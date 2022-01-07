@@ -508,8 +508,9 @@ void visualizzaElencoTransazioni() {
     } else {
         puts("\n---- ELENCO TRANSAZIONI --------");
         while (!feof(ptrTra)) {
-           fgets(elementoElenco, 50, ptrTra);
-           printf("%s", elementoElenco);
+            
+            fgets(elementoElenco, 50, ptrTra);
+            printf("%s", elementoElenco);
         }
         puts("");
     }
