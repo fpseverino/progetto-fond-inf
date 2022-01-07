@@ -282,6 +282,14 @@ void transazione(FILE *pFile, Data oggi) {
 
                     case 2: // prelievo
                         // stampa le informazioni dell'account prima della transazione
+                    if (account.tipoConto > 2)
+                    {
+                        if (anniPassati(account.dataAperturaConto, oggi) < (account.tipoConto -2))
+                        {
+                            printf("Impossibile effetturare l'operazione\n");
+                            break;
+                        }
+                        
                         printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
                         printf("%-30s%.2lf\n\n", account.nome, account.saldo);
 
@@ -302,6 +310,7 @@ void transazione(FILE *pFile, Data oggi) {
 
                             printf("\nIl prelievo e' andato a buon fine. \n Saldo dell'account: %.2lf\n\n", account.saldo);
                         }
+                    }   
                         break;
 
                     case 3: // bonifico
