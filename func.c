@@ -291,7 +291,6 @@ void transazione(FILE *pFile, Data oggi) {
                             printf(" ERRORE: Inserisci un valore positivo.");
                         } else if (somma > account.saldo) {
                             printf(" ERRORE: Inserisci un valore minore del saldo totale.");
-                            // NOTA PER ROBERTO: Potremmo dare la possibilità di avere un saldo negativo
                         } else {
                             account.saldo -= somma;
                             // sposta il puntatore del file al record corretto nel file
