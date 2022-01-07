@@ -503,7 +503,6 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
 void visualizzaElencoTransazioni() {
     FILE *ptrTra;
     char elementoElenco[50];
-    ptrTra = fopen("transazioni.txt","r");
     if ((ptrTra = fopen("transazioni.txt","r")) == NULL) {
         puts("\nERRORE: Impossibile aprire il file.\n");
     } else {
