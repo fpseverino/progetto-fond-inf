@@ -23,7 +23,6 @@ unsigned int menuPrincipale() {
         " 6 - Vedi dettagli conto\n"
         " 7 - Visualizza elenco transazioni\n"
         " 8 - Uscita\n? ");
-
     unsigned int sceltaMenu;
     scanf("%u", &sceltaMenu);
     fflush(stdin);
@@ -223,11 +222,11 @@ void modificaConto(FILE *pFile) {
 }
 
 void transazione(FILE *pFile, Data oggi) {
-    FILE *ptrTra;
+    FILE *pFileTransazioni; // puntatore al file "transazioni.txt"
+
     printf("%s", "\nInserisci il numero dell'account su cui operare (1 - 100): "); 
     unsigned int numeroAccount;
     scanf("%u", &numeroAccount);
-    fflush(stdin);
 
     fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
     // crea DatiAccount con informazioni predefinite
@@ -248,117 +247,23 @@ void transazione(FILE *pFile, Data oggi) {
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else {
-        if ((ptrTra = fopen("transazioni.txt", "a+")) == NULL) {
+        if ((pFileTransazioni = fopen("transazioni.txt", "a+")) == NULL) {
             puts("ERRORE: Il file non può essere aperto.\n");
         } else {
             puts("");
-
-            double somma; // importo della transazione
-            
-
             unsigned int sceltaTransazione; // scelta dell'utente
             while ((sceltaTransazione = menuTransazioni(account.numeroConto)) != 5) {
                 switch (sceltaTransazione) {
                     case 1: // deposito
-                        // stampa le informazioni dell'account prima della transazione
-                        printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
-                        printf("%-30s%.2lf\n\n", account.nome, account.saldo);
-
-                        printf("Importo da depositare: ");
-                        scanf("%lf",&somma);
-                        if (somma < 0.0) {
-                            printf(" ERRORE: Inserisci un valore positivo, transazione annullata.");
-                        } else {
-                            account.saldo += somma;
-                            // sposta il puntatore del file al record corretto nel file
-                            fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-                            fwrite(&account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
-
-                            fprintf(ptrTra, " Transazione Tipo: DEPOSITO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account.numeroConto, somma, oggi.giorno, oggi.mese, oggi.anno);
-                            fprintf(ptrTra, "--------------------------------\n");
-
-                            printf("\nIl deposito e' andato a buon fine.\n Saldo dell'account #%u: %.2lf\n\n", account.numeroConto, account.saldo);
-                        }
+                        funcDeposito(pFile, pFileTransazioni, account, oggi);
                         break;
 
                     case 2: // prelievo
-                        // stampa le informazioni dell'account prima della transazione
-                        if (account.tipoConto > 2) {
-                            if (anniPassati(account.dataAperturaConto, oggi) < (account.tipoConto - 2)) {
-                                puts("\nImpossibile effetturare l'operazione\n");
-                                break;
-                            }
-                        }
-                        
-                        printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
-                        printf("%-30s%.2lf\n\n", account.nome, account.saldo);
-
-                        printf("Importo da prelevare: ");
-                        scanf("%lf",&somma);
-                        if (somma < 0.0) {
-                            printf(" ERRORE: Inserisci un valore positivo.");
-                        } else if (somma > account.saldo) {
-                            printf(" ERRORE: Inserisci un valore minore del saldo totale.");
-                        } else {
-                            account.saldo -= somma;
-                            // sposta il puntatore del file al record corretto nel file
-                            fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-                            fwrite(&account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
-
-                            fprintf(ptrTra, " Transazione Tipo: PRELIEVO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account.numeroConto, somma, oggi.giorno, oggi.mese, oggi.anno);
-                            fprintf(ptrTra, "--------------------------------\n");
-
-                            printf("\nIl prelievo e' andato a buon fine. \n Saldo dell'account: %.2lf\n\n", account.saldo);
-                        }   
+                        prelievo(pFile, pFileTransazioni, account, oggi);
                         break;
 
                     case 3: // bonifico
-                        if (account.tipoConto == 1) {
-                            printf("%s", "\nInserisci il numero del secondo account (1 - 100): "); 
-                            unsigned int numeroAccount2;
-                            scanf("%u", &numeroAccount2);
-                            fflush(stdin);
-
-                            fseek(pFile, (numeroAccount2 - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
-                            // crea DatiAccount con informazioni predefinite
-                            DatiAccount account2 = {
-                                "",
-                                {0, 0, 0},
-                                "",
-                                "",
-                                "",
-                                0.0,
-                                0,
-                                0,
-                                {0, 0, 0},
-                                0.0
-                            };
-
-                            fread(&account2, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
-
-                            if (account2.numeroConto == 0) {
-                                printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
-                            } else {
-                                printf("Inserisci Importo\n");
-                                double bonifico;
-                                scanf("%lf",&bonifico);
-                                account.saldo -= bonifico;
-                                account2.saldo += bonifico;
-                                
-                                // sposta il puntatore del file al record corretto nel file
-                                fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
-                                fwrite(&account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
-                                // sposta il puntatore del file al record corretto nel file
-                                fseek(pFile, (numeroAccount2 - 1) * sizeof(DatiAccount), SEEK_SET);
-                                fwrite(&account2, sizeof(DatiAccount), 1, pFile); // aggiornamento record
-
-                                fprintf(ptrTra, " Transazione Tipo: BONIFICO\n Da Conto #%u\n A Conto #%u\n Importo: %.2f\n  Data: %u/%u/%u\n", account.numeroConto, account2.numeroConto ,bonifico, oggi.giorno, oggi.mese, oggi.anno);
-                                fprintf(ptrTra, "--------------------------------\n");
-                                printf("Operazione andata a buon fine\n");
-
-
-                            }
-                        }
+                        bonifico(pFile, pFileTransazioni, account, oggi);
                         break;
 
                     case 4: // cambia account
@@ -392,12 +297,12 @@ void transazione(FILE *pFile, Data oggi) {
                         break;
 
                     default: // scelta non valida
-                        printf("\nERRORE: Scegli un'opzione dal menù.\n");
+                        printf("\nERRORE: Scegli un'opzione dal menu.\n");
                         break;
                 }
             }
-            fclose(ptrTra);
-            puts("\nUscita dal menù transazioni.\n");
+            fclose(pFileTransazioni);
+            puts("\nUscita dal menu transazioni.\n");
         }
     }
 }
@@ -555,19 +460,126 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
 
 void visualizzaElencoTransazioni() {
     FILE *ptrTra;
+    int numeroCaratteriLetti = 0;
     char elementoElenco[50];
     if ((ptrTra = fopen("transazioni.txt","r")) == NULL) {
-        puts("\nERRORE: Impossibile aprire il file.\n");
+        puts("\nERRORE: Il file non esiste.\n");
     } else {
         puts("\n---- ELENCO TRANSAZIONI --------");
         while (!feof(ptrTra)) {
-            
             fgets(elementoElenco, 50, ptrTra);
-            printf("%s", elementoElenco);
+            numeroCaratteriLetti += printf("%s", elementoElenco);
+        }
+        if (numeroCaratteriLetti == 0) {
+            puts("Non ci sono transazioni salvate.");
         }
         puts("");
     }
     fclose(ptrTra);
+}
+
+// FUNZIONI PER LE TRANSAZIONI
+
+void funcDeposito(FILE *pFile, FILE *pTra, DatiAccount account, Data dataOdierna) {
+    // stampa le informazioni dell'account prima della transazione
+    printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
+    printf("%-30s%.2lf\n\n", account.nome, account.saldo);
+
+    printf("Importo da depositare: ");
+    double importoDeposito;
+    scanf("%lf",&importoDeposito);
+    if (importoDeposito < 0.0) {
+        printf(" ERRORE: Inserisci un valore positivo, transazione annullata.");
+    } else {
+        account.saldo += importoDeposito;
+        // sposta il puntatore del file al record corretto nel file
+        fseek(pFile, (account.numeroConto - 1) * sizeof(DatiAccount), SEEK_SET);
+        fwrite(&account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
+
+        fprintf(pTra, " Transazione Tipo: DEPOSITO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account.numeroConto, importoDeposito, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
+        fprintf(pTra, "--------------------------------\n");
+
+        printf("\nIl deposito e' andato a buon fine.\n Saldo dell'account #%u: %.2lf\n\n", account.numeroConto, account.saldo);
+    }
+}
+
+void prelievo(FILE *pFile, FILE *pTra, DatiAccount account, Data dataOdierna) {
+    // controlla che il tipo di conto permetta il prelievo
+    if (account.tipoConto > 2) {
+        if (anniPassati(account.dataAperturaConto, dataOdierna) < (account.tipoConto - 2)) {
+            puts("\nDato il tipo di conto, ti è impossibile prelevare al momento.\n");
+            return;
+        }
+    }
+    // stampa le informazioni dell'account prima della transazione
+    printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
+    printf("%-30s%.2lf\n\n", account.nome, account.saldo);
+
+    printf("Importo da prelevare: ");
+    double importoPrelievo;
+    scanf("%lf",&importoPrelievo);
+    if (importoPrelievo < 0.0) {
+        puts(" ERRORE: Inserisci un valore positivo.");
+    } else if (importoPrelievo > account.saldo) {
+        puts(" ERRORE: Inserisci un valore minore del saldo totale.");
+    } else {
+        account.saldo -= importoPrelievo;
+        // sposta il puntatore del file al record corretto nel file
+        fseek(pFile, (account.numeroConto - 1) * sizeof(DatiAccount), SEEK_SET);
+        fwrite(&account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
+
+        fprintf(pTra, " Transazione Tipo: PRELIEVO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account.numeroConto, importoPrelievo, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
+        fprintf(pTra, "--------------------------------\n");
+
+        printf("\nIl prelievo e' andato a buon fine. \n Saldo dell'account: %.2lf\n\n", account.saldo);
+    }
+}
+
+void bonifico(FILE *pFile, FILE *pTra, DatiAccount account, Data dataOdierna) {
+    if (account.tipoConto == 1) {
+        printf("%s", "\nInserisci il numero del secondo account (1 - 100): "); 
+        unsigned int numeroAccount2;
+        scanf("%u", &numeroAccount2);
+        fflush(stdin);
+
+        fseek(pFile, (numeroAccount2 - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
+        // crea DatiAccount con informazioni predefinite
+        DatiAccount account2 = {
+            "",
+            {0, 0, 0},
+            "",
+            "",
+            "",
+            0.0,
+            0,
+            0,
+            {0, 0, 0},
+            0.0
+        };
+
+        fread(&account2, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
+
+        if (account2.numeroConto == 0) {
+            printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount2);
+        } else {
+            printf("Inserisci importo: ");
+            double importoBonifico;
+            scanf("%lf",&importoBonifico);
+            account.saldo -= importoBonifico;
+            account2.saldo += importoBonifico;
+
+            // sposta il puntatore del file al record corretto nel file
+            fseek(pFile, (account.numeroConto - 1) * sizeof(DatiAccount), SEEK_SET);
+            fwrite(&account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
+            // sposta il puntatore del file al record corretto nel file
+            fseek(pFile, (numeroAccount2 - 1) * sizeof(DatiAccount), SEEK_SET);
+            fwrite(&account2, sizeof(DatiAccount), 1, pFile); // aggiornamento record
+
+            fprintf(pTra, " Transazione Tipo: BONIFICO\n  Dal conto #%u\n  Al conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account.numeroConto, account2.numeroConto, importoBonifico, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
+            fprintf(pTra, "--------------------------------\n");
+            puts("Operazione andata a buon fine\n");
+        }
+    } else puts("\nE' possibile effettuare bonifici solo con conti correnti.\n");
 }
 
 // FUNZIONI GESTIONE DATE
