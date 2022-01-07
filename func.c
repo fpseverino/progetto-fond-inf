@@ -254,6 +254,7 @@ void transazione(FILE *pFile, Data oggi) {
             puts("");
 
             double somma; // importo della transazione
+            
 
             unsigned int sceltaTransazione; // scelta dell'utente
             while ((sceltaTransazione = menuTransazioni(account.numeroConto)) != 5) {
@@ -312,7 +313,44 @@ void transazione(FILE *pFile, Data oggi) {
                         break;
 
                     case 3: // bonifico
-                        puts("\nWork in progress\n");
+                        if (account.tipoConto == 1)
+                        {
+                            printf("%s", "\nInserisci il numero del secondo account (1 - 100): "); 
+                        scanf("%u", &numeroAccount);
+                        fflush(stdin);
+
+                        fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
+                        // crea DatiAccount con informazioni predefinite
+                        DatiAccount account2 = {
+                            "",
+                            {0, 0, 0},
+                            "",
+                            "",
+                            "",
+                            0.0,
+                            0,
+                            0,
+                            {0, 0, 0},
+                            0.0
+                        };
+
+                        fread(&account2, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
+
+                        if (account2.numeroConto == 0) {
+                            printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
+                        } else {
+                            printf("Inserisci Importo\n");
+                            double bonifico;
+                            scanf("%lf",&bonifico);
+                            account.saldo -= bonifico;
+                            account2.saldo += bonifico;
+                            fprintf(ptrTra, " Transazione Tipo: BONIFICO\n    Da Conto #%u\n A Conto #%u\n Importo: %.2f\n  Data: %u/%u/%u\n", account.numeroConto, account2.numeroConto ,bonifico, oggi.giorno, oggi.mese, oggi.anno);
+                            fprintf(ptrTra, "--------------------------------\n");
+                            printf("Operazione andata a buon fine\n");
+
+
+                        }
+                        }
                         break;
 
                     case 4: // cambia account
