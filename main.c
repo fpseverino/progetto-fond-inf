@@ -6,6 +6,7 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "func.h"
 
 int main() {
@@ -39,10 +40,10 @@ int main() {
     if ((pAccountFile = fopen("accounts.dat", "rb+")) == NULL) {
         puts("ERRORE: Il file non può essere aperto.");
     } else {
-        printf("%s", "\nCiao! Inserisci la data di oggi (gg/mm/aaaa): ");
+        puts("----------------------------------------------------------------");
+        printf("%s", "Ciao! Inserisci la data di oggi (gg/mm/aaaa): ");
         Data oggi;
         scanf("%u%*c%u%*c%u", &oggi.giorno, &oggi.mese, &oggi.anno);
-        fflush(stdin);
         // controlla che la data sia valida
         if (!controllaData(oggi)) {
             puts(" ERRORE: Inserisci una data valida.\n");
@@ -73,7 +74,8 @@ int main() {
             }    
         }
         fclose(pAccountFile);
-        puts("\nUscita dall'applicazione.\n");
+        puts("\nUscita dall'applicazione.");
+        puts("----------------------------------------------------------------");
     }
     return 0;
 }

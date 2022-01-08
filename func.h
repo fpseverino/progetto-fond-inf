@@ -47,14 +47,16 @@ void eliminaAccount(FILE *pFile, Data dataOdierna);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoTransazioni();
 // FUNZIONI PER LE TRANSAZIONI
-void funcDeposito(FILE *pFile, FILE *pTra, DatiAccount account, Data dataOdierna);
-void prelievo(FILE *pFile, FILE *pTra, DatiAccount account, Data dataOdierna);
-void bonifico();
+void funcDeposito(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
+void prelievo(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
+void bonifico(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
+void cambiaAccount(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
 // FUNZIONI GESTIONE DATE
 int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
 bool isLeapYear(int anno);
 bool controllaData(Data data); // funzione che verifica che una data sia valida
 // ALTRE FUNZIONI
 void inMaiuscolo(char * string, int n); // funzione che riceve una stringa e la modifica rendendo tutti i caratteri maiuscoli
+void stampaDettagliConto(DatiAccount account, Data dataOdierna);
 
 #endif
