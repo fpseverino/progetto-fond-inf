@@ -50,7 +50,7 @@ void visualizzaElencoTransazioni();
 void funcDeposito(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
 void prelievo(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
 void bonifico(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
-void cambiaAccount(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
+void cambiaAccount(FILE *pFile, DatiAccount * account, Data dataOdierna);
 // FUNZIONI GESTIONE DATE
 int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
 bool isLeapYear(int anno);

@@ -256,7 +256,7 @@ void transazione(FILE *pFile, Data dataOdierna) {
                             break;
                     case 3: bonifico(pFile, pFileTransazioni, &account, dataOdierna);
                             break;
-                    case 4: cambiaAccount(pFile, pFileTransazioni, &account, dataOdierna);
+                    case 4: cambiaAccount(pFile, &account, dataOdierna);
                             break;
                     default: /* scelta non valida */ puts("\nERRORE: Scegli un'opzione dal menù.\n");
                             break;
@@ -425,7 +425,7 @@ void prelievo(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna) 
 
 void bonifico(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna) {
     if (account->tipoConto == 1) {
-        printf("%s", "\nInserisci il numero del secondo account (1 - 100): "); 
+        printf("%s", "\nInserisci il numero dell'account che riceverà il bonifico (1 - 100): "); 
         unsigned int numeroAccount2;
         scanf("%u", &numeroAccount2);
 
@@ -469,7 +469,7 @@ void bonifico(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna) 
     } else puts("\nE' possibile effettuare bonifici solo con conti correnti.\n");
 }
 
-void cambiaAccount(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna) {
+void cambiaAccount(FILE *pFile, DatiAccount * account, Data dataOdierna) {
     printf("%s", "\nInserisci il numero del nuovo account su cui operare (1 - 100): ");
     unsigned int numeroAccount;
     scanf("%u", &numeroAccount);
@@ -494,7 +494,8 @@ void cambiaAccount(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdie
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else {
         *account = accountTemp;
-        printf(" Cambio account eseguito con successo (nuovo account: %u).\n\n", account->numeroConto);
+        printf(" Cambio account eseguito con successo (nuovo account: %u).\n", account->numeroConto);
+        stampaDettagliConto(*account, dataOdierna);
     }
 }
 
