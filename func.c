@@ -76,12 +76,12 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         printf("%s", " Inserisci nome e cognome: ");
         scanf("%24[^\n]", account.nome);
 
-        bool checkData = false;
-        while (!checkData) {
+        bool checkDataNascita = false;
+        while (!checkDataNascita) {
             fflush(stdin);
             printf("%s", " Inserisci data di nascita (gg/mm/aaaa): ");
             scanf("%u%*c%u%*c%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
-            if (!(checkData = controllaData(account.dataNascita))) {
+            if (!(checkDataNascita = controllaData(account.dataNascita))) {
                 puts("  ERRORE: Inserisci una data valida.");
                 continue;
             }
