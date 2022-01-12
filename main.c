@@ -50,7 +50,6 @@ int main() {
             return 0;
         }
         puts("");
-        
         unsigned int scelta;
         // consenti all'utente di specificare l'azione
         while ((scelta = menuPrincipale()) != 8) {

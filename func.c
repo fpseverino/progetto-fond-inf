@@ -200,6 +200,7 @@ void modificaConto(FILE *pFile) {
         0.0
     };
     fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
+
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* modifica il record */ {
@@ -288,6 +289,7 @@ void eliminaAccount(FILE *pFile, Data dataOdierna) {
         0.0
     };
     fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
+
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* cancella il record */ {
@@ -346,6 +348,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         0.0
     };
     fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
+
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else {
@@ -521,7 +524,7 @@ int anniPassati(Data primaData, Data secondaData) {
     return anni;
 }
 
-bool isLeapYear(int anno) {
+bool bisestile(int anno) {
     return (((anno % 4 == 0) && (anno % 100 != 0)) || (anno % 400 == 0)); // ritorna true se l'anno è bisestile
 }
 
@@ -531,7 +534,7 @@ bool controllaData(Data data) {
     if (data.giorno < 1 || data.giorno > 31) return false;
     // controlla febbraio negli anni bisestili
     if (data.mese == 2) {
-        if (isLeapYear(data.anno)) {
+        if (bisestile(data.anno)) {
             return (data.giorno <= 29);
         } else return (data.giorno <= 28);
     }
