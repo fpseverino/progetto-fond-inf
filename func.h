@@ -8,12 +8,9 @@
 #ifndef FUNC_H
 #define FUNC_H
 
+#include "func_date.h"
 #include <stdio.h>
 #include <stdbool.h>
-
-typedef struct {
-    unsigned int giorno, mese, anno;
-} Data;
 
 typedef enum { corrente = 1, deposito, fisso1Anno, fisso2Anni, fisso3Anni } TIPO_CONTO;
     // corrente:   interessi 0%            (manda e ricevi denaro verso e da altri conti)
@@ -35,10 +32,8 @@ typedef struct {
     double interessi;
 } DatiAccount;
 
-// FUNZIONI PER GESTIONE MENU
 unsigned int menuPrincipale();
-unsigned int menuTransazioni(unsigned int numeroAccount);
-// FUNZIONI PRINCIPALI
+
 void aggiungiNuovoConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoConti(FILE *pFile);
 void modificaConto(FILE *pFile);
@@ -46,16 +41,7 @@ void transazione(FILE *pFile, Data oggi);
 void eliminaAccount(FILE *pFile, Data dataOdierna);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoTransazioni();
-// FUNZIONI PER LE TRANSAZIONI
-void funcDeposito(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
-void prelievo(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
-void bonifico(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
-void cambiaAccount(FILE *pFile, DatiAccount * account, Data dataOdierna);
-// FUNZIONI GESTIONE DATE
-int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
-bool bisestile(int anno);
-bool controllaData(Data data); // funzione che verifica che una data sia valida
-// ALTRE FUNZIONI
+
 void inMaiuscolo(char * string, int n); // funzione che riceve una stringa e la modifica rendendo tutti i caratteri maiuscoli
 void stampaDettagliConto(DatiAccount account, Data dataOdierna);
 

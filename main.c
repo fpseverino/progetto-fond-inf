@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "func.h"
+#include "func_date.h"
 
 int main() {
     FILE *pAccountFile; // puntatore al file accounts.dat
