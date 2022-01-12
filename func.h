@@ -5,8 +5,8 @@
 //  Created by Francesco Paolo Severino and Roberto Giovanni Scolari on 27/12/21.
 //
 
-#ifndef func_h
-#define func_h
+#ifndef FUNC_H
+#define FUNC_H
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -53,7 +53,7 @@ void bonifico(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
 void cambiaAccount(FILE *pFile, DatiAccount * account, Data dataOdierna);
 // FUNZIONI GESTIONE DATE
 int anniPassati(Data primaData, Data secondaData); // funzione che ritorna gli anni passati fra due date
-bool isLeapYear(int anno);
+bool bisestile(int anno);
 bool controllaData(Data data); // funzione che verifica che una data sia valida
 // ALTRE FUNZIONI
 void inMaiuscolo(char * string, int n); // funzione che riceve una stringa e la modifica rendendo tutti i caratteri maiuscoli
