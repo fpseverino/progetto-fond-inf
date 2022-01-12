@@ -521,7 +521,7 @@ int anniPassati(Data primaData, Data secondaData) {
     return anni;
 }
 
-bool bisestile(int anno) {
+bool isLeapYear(int anno) {
     return (((anno % 4 == 0) && (anno % 100 != 0)) || (anno % 400 == 0)); // ritorna true se l'anno è bisestile
 }
 
@@ -531,7 +531,7 @@ bool controllaData(Data data) {
     if (data.giorno < 1 || data.giorno > 31) return false;
     // controlla febbraio negli anni bisestili
     if (data.mese == 2) {
-        if (bisestile(data.anno)) {
+        if (isLeapYear(data.anno)) {
             return (data.giorno <= 29);
         } else return (data.giorno <= 28);
     }
