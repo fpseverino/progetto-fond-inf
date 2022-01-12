@@ -7,6 +7,7 @@
 
 #include "func.h"
 #include "func_date.h"
+#include "transazione.h"
 #include <stdio.h>
 
 unsigned int menuTransazioni(unsigned int numeroAccount) {
