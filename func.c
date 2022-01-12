@@ -76,12 +76,15 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         printf("%s", " Inserisci nome e cognome: ");
         scanf("%24[^\n]", account.nome);
 
-        fflush(stdin);
-        printf("%s", " Inserisci data di nascita (gg/mm/aaaa): ");
-        scanf("%u%*c%u%*c%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
-        if (!controllaData(account.dataNascita)) {
-            puts("  ERRORE: Inserisci una data valida, operazione di aggiunta conto annullata.\n");
-            return;
+        bool checkData = false;
+        while (!checkData) {
+            fflush(stdin);
+            printf("%s", " Inserisci data di nascita (gg/mm/aaaa): ");
+            scanf("%u%*c%u%*c%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
+            if (!(checkData = controllaData(account.dataNascita))) {
+                puts("  ERRORE: Inserisci una data valida.");
+                continue;
+            }
         }
 
         fflush(stdin);
@@ -101,42 +104,49 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         printf("%s", " Inserisci saldo: ");
         scanf("%lf", &account.saldo);
 
-        fflush(stdin);
-        printf("%s", " Inserisci il tipo di conto:\n"
-            "  1 - corrente         (interessi: 0%)\n"
-            "  2 - deposito         (interessi: 1% all'anno)\n"
-            "  3 - fisso per 1 anno (interessi: 2% all'anno)\n"
-            "  4 - fisso per 2 anni (interessi: 2,5% all'anno)\n"
-            "  5 - fisso per 3 anni (interessi: 3% all'anno)\n ? ");
-        TIPO_CONTO temp;
-        scanf("%d", &temp);
-        switch (temp) {
-            case 1:
-                account.tipoConto = corrente;
-                account.interessi = 1.0;
-                break;
-            case 2:
-                account.tipoConto = deposito;
-                account.interessi = 1.01;
-                break;
-            case 3:
-                account.tipoConto = fisso1Anno;
-                account.interessi = 1.02;
-                break;
-            case 4:
-                account.tipoConto = fisso2Anni;
-                account.interessi = 1.025;
-                break;
-            case 5:
-                account.tipoConto = fisso3Anni;
-                account.interessi = 1.03;
-                break;
-            default:
-                puts("  ERRORE: Scelta non consentita, operazione di aggiunta conto annullata.\n");
-                return;
-                break;
+        bool checkTipoConto = false;
+        while (!checkTipoConto) {
+            fflush(stdin);
+            printf("%s", " Inserisci il tipo di conto:\n"
+                "  1 - corrente         (interessi: 0%)\n"
+                "  2 - deposito         (interessi: 1% all'anno)\n"
+                "  3 - fisso per 1 anno (interessi: 2% all'anno)\n"
+                "  4 - fisso per 2 anni (interessi: 2,5% all'anno)\n"
+                "  5 - fisso per 3 anni (interessi: 3% all'anno)\n ? ");
+            TIPO_CONTO temp;
+            scanf("%d", &temp);
+            switch (temp) {
+                case 1:
+                    account.tipoConto = corrente;
+                    account.interessi = 1.0;
+                    checkTipoConto = true;
+                    break;
+                case 2:
+                    account.tipoConto = deposito;
+                    account.interessi = 1.01;
+                    checkTipoConto = true;
+                    break;
+                case 3:
+                    account.tipoConto = fisso1Anno;
+                    account.interessi = 1.02;
+                    checkTipoConto = true;
+                    break;
+                case 4:
+                    account.tipoConto = fisso2Anni;
+                    account.interessi = 1.025;
+                    checkTipoConto = true;
+                    break;
+                case 5:
+                    account.tipoConto = fisso3Anni;
+                    account.interessi = 1.03;
+                    checkTipoConto = true;
+                    break;
+                default:
+                    puts("  ERRORE: Scelta non consentita.");
+                    break;
+            }
         }
-
+        
         account.dataAperturaConto.giorno = dataOdierna.giorno;
         account.dataAperturaConto.mese = dataOdierna.mese;
         account.dataAperturaConto.anno = dataOdierna.anno;
@@ -204,12 +214,21 @@ void modificaConto(FILE *pFile) {
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
     } else /* modifica il record */ {
-        fflush(stdin);
-        printf("%s", " Inserisci nuovo indirizzo di residenza: ");
-        scanf("%29[^\n]", account.indirizzoResidenza);
+        printf("\n---- Dati dell'account #%u ----------------\n", account.numeroConto);
+        printf("%-27s%s\n", " Nome: ", account.nome);
+        printf("%-27s%s\n", " Indirizzo di residenza: ", account.indirizzoResidenza);
+        printf("%-27s%s\n", " Telefono: ", account.telefono);
+        
+        // fflush(stdin);
+        // printf("%s", "\nInserisci nuovo indirizzo di residenza: ");
+        // char tempIndirizzo[30];
+        // fgets(tempIndirizzo, 30, stdin);
+        // if (tempIndirizzo[0] != '\n') {
+        //     strcpy(account.indirizzoResidenza, tempIndirizzo);
+        // }
 
         fflush(stdin);
-        printf("%s", " Inserisci nuovo numero di telefono: ");
+        printf("%s", "Inserisci nuovo numero di telefono: ");
         scanf("%16[^\n]", account.telefono);
 
         fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
