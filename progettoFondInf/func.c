@@ -355,18 +355,18 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
 
 void visualizzaElencoTransazioni() {
     FILE *ptrTra;
+    int numeroCaratteriLetti = 0;
+    char elementoElenco[50];
     if ((ptrTra = fopen("transazioni.txt","r")) == NULL) {
         puts("\nERRORE: Il file delle transazioni non esiste.\n");
     } else {
-        char c = fgetc(ptrTra);
-        if (c == EOF) {
-            puts("\nNon ci sono transazioni salvate.\n");
-            return;
-        }
         puts("\n---- ELENCO TRANSAZIONI --------");
-        while (c != EOF) {
-            printf("%c", c);
-            c = fgetc(ptrTra);
+        while (!feof(ptrTra)) {
+            fgets(elementoElenco, 50, ptrTra);
+            numeroCaratteriLetti += printf("%s", elementoElenco);
+        }
+        if (numeroCaratteriLetti == 0) {
+            puts("Non ci sono transazioni salvate.");
         }
         puts("");
     }
