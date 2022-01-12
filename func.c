@@ -218,14 +218,10 @@ void modificaConto(FILE *pFile) {
         printf("%-27s%s\n", " Nome: ", account.nome);
         printf("%-27s%s\n", " Indirizzo di residenza: ", account.indirizzoResidenza);
         printf("%-27s%s\n", " Telefono: ", account.telefono);
-        
-        // fflush(stdin);
-        // printf("%s", "\nInserisci nuovo indirizzo di residenza: ");
-        // char tempIndirizzo[30];
-        // fgets(tempIndirizzo, 30, stdin);
-        // if (tempIndirizzo[0] != '\n') {
-        //     strcpy(account.indirizzoResidenza, tempIndirizzo);
-        // }
+
+        fflush(stdin);
+        printf("%s", "\nInserisci nuovo indirizzo di residenza: ");
+        scanf("%29[^\n]", account.indirizzoResidenza);
 
         fflush(stdin);
         printf("%s", "Inserisci nuovo numero di telefono: ");
