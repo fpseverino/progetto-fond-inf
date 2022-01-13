@@ -58,14 +58,14 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
     if (account.numeroConto != 0) {
         printf(" L'account #%u contiene già informazioni.\n\n", account.numeroConto);
     } else /* crea il record */ {
-        fflush(stdin);
         printf("%s", " Inserisci nome e cognome: ");
+        fflush(stdin);
         scanf("%24[^\n]", account.nome);
 
         bool checkDataNascita = false;
         while (!checkDataNascita) {
-            fflush(stdin);
             printf("%s", " Inserisci data di nascita (gg/mm/aaaa): ");
+            fflush(stdin);
             scanf("%u%*c%u%*c%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
             if (!(checkDataNascita = controllaData(account.dataNascita))) {
                 puts("  ERRORE: Inserisci una data valida.");
@@ -73,33 +73,34 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
             }
         }
 
-        fflush(stdin);
         printf("%s", " Inserisci codice fiscale: ");
+        fflush(stdin);
         scanf("%16s", account.codiceFiscale);
         inMaiuscolo(account.codiceFiscale, strlen(account.codiceFiscale));
 
-        fflush(stdin);
         printf("%s", " Inserisci indirizzo di residenza: ");
+        fflush(stdin);
         scanf("%29[^\n]", account.indirizzoResidenza);
 
-        fflush(stdin);
         printf("%s", " Inserisci numero di telefono: ");
+        fflush(stdin);
         scanf("%16[^\n]", account.telefono);
 
-        fflush(stdin);
         printf("%s", " Inserisci saldo: ");
+        fflush(stdin);
         scanf("%lf", &account.saldo);
 
+        printf("%s", " Inserisci il tipo di conto:\n"
+            "  1 - corrente         (interessi: 0%)\n"
+            "  2 - deposito         (interessi: 1% all'anno)\n"
+            "  3 - fisso per 1 anno (interessi: 2% all'anno)\n"
+            "  4 - fisso per 2 anni (interessi: 2,5% all'anno)\n"
+            "  5 - fisso per 3 anni (interessi: 3% all'anno)\n");
+        TIPO_CONTO temp;
         bool checkTipoConto = false;
         while (!checkTipoConto) {
+            printf("%s", " ? ");
             fflush(stdin);
-            printf("%s", " Inserisci il tipo di conto:\n"
-                "  1 - corrente         (interessi: 0%)\n"
-                "  2 - deposito         (interessi: 1% all'anno)\n"
-                "  3 - fisso per 1 anno (interessi: 2% all'anno)\n"
-                "  4 - fisso per 2 anni (interessi: 2,5% all'anno)\n"
-                "  5 - fisso per 3 anni (interessi: 3% all'anno)\n ? ");
-            TIPO_CONTO temp;
             scanf("%d", &temp);
             switch (temp) {
                 case 1:
@@ -205,12 +206,12 @@ void modificaConto(FILE *pFile) {
         printf("%-27s%s\n", " Indirizzo di residenza: ", account.indirizzoResidenza);
         printf("%-27s%s\n", " Telefono: ", account.telefono);
 
-        fflush(stdin);
         printf("%s", "\nInserisci nuovo indirizzo di residenza: ");
+        fflush(stdin);
         scanf("%29[^\n]", account.indirizzoResidenza);
 
-        fflush(stdin);
         printf("%s", "Inserisci nuovo numero di telefono: ");
+        fflush(stdin);
         scanf("%16[^\n]", account.telefono);
 
         fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
