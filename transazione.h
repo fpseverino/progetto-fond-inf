@@ -14,9 +14,9 @@
 
 unsigned int menuTransazioni(unsigned int numeroAccount);
 
-void funcDeposito(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
-void prelievo(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
-void bonifico(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna);
+void funcDeposito(FILE *pFile, FILE *pTxn, DatiAccount * account, Data dataOdierna);
+void prelievo(FILE *pFile, FILE *pTxn, DatiAccount * account, Data dataOdierna);
+void bonifico(FILE *pFile, FILE *pTxn, DatiAccount * account, Data dataOdierna);
 void cambiaAccount(FILE *pFile, DatiAccount * account, Data dataOdierna);
 
 #endif

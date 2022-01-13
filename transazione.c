@@ -22,7 +22,7 @@ unsigned int menuTransazioni(unsigned int numeroAccount) {
     return sceltaMenu;
 }
 
-void funcDeposito(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna) {
+void funcDeposito(FILE *pFile, FILE *pTxn, DatiAccount * account, Data dataOdierna) {
     printf("\nImporto da depositare: ");
     double importoDeposito;
     scanf("%lf",&importoDeposito);
@@ -34,14 +34,14 @@ void funcDeposito(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdier
         fseek(pFile, (account->numeroConto - 1) * sizeof(DatiAccount), SEEK_SET);
         fwrite(account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
 
-        fprintf(pTra, " Tipo di transazione: DEPOSITO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account->numeroConto, importoDeposito, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
-        fprintf(pTra, "--------------------------------\n");
+        fprintf(pTxn, " Tipo di transazione: DEPOSITO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account->numeroConto, importoDeposito, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
+        fprintf(pTxn, "--------------------------------\n");
 
         printf("\nOperazione eseguita con successo.\n Saldo dell'account #%u: %.2lf\n\n", account->numeroConto, account->saldo);
     }
 }
 
-void prelievo(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna) {
+void prelievo(FILE *pFile, FILE *pTxn, DatiAccount * account, Data dataOdierna) {
     // controlla che il tipo di conto permetta il prelievo
     if (account->tipoConto > 2) {
         if (anniPassati(account->dataAperturaConto, dataOdierna) < (account->tipoConto - 2)) {
@@ -63,14 +63,14 @@ void prelievo(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna) 
         fseek(pFile, (account->numeroConto - 1) * sizeof(DatiAccount), SEEK_SET);
         fwrite(account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
 
-        fprintf(pTra, " Tipo di transazione: PRELIEVO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account->numeroConto, importoPrelievo, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
-        fprintf(pTra, "--------------------------------\n");
+        fprintf(pTxn, " Tipo di transazione: PRELIEVO\n  Conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account->numeroConto, importoPrelievo, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
+        fprintf(pTxn, "--------------------------------\n");
 
         printf("\nOperazione eseguita con successo.\n Saldo dell'account #%u: %.2lf\n\n", account->numeroConto, account->saldo);
     }
 }
 
-void bonifico(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna) {
+void bonifico(FILE *pFile, FILE *pTxn, DatiAccount * account, Data dataOdierna) {
     if (account->tipoConto == 1) {
         printf("%s", "\nInserisci il numero dell'account che riceverà il bonifico (1 - 100): "); 
         unsigned int numeroAccount2;
@@ -108,8 +108,8 @@ void bonifico(FILE *pFile, FILE *pTra, DatiAccount * account, Data dataOdierna) 
             fseek(pFile, (numeroAccount2 - 1) * sizeof(DatiAccount), SEEK_SET);
             fwrite(&account2, sizeof(DatiAccount), 1, pFile); // aggiornamento record
 
-            fprintf(pTra, " Tipo di transazione: BONIFICO\n  Dal conto #%u\n  Al conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account->numeroConto, account2.numeroConto, importoBonifico, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
-            fprintf(pTra, "--------------------------------\n");
+            fprintf(pTxn, " Tipo di transazione: BONIFICO\n  Dal conto #%u\n  Al conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account->numeroConto, account2.numeroConto, importoBonifico, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
+            fprintf(pTxn, "--------------------------------\n");
 
             printf("\nOperazione eseguita con successo.\n Saldo dell'account #%u: %.2lf\n\n", account->numeroConto, account->saldo);
         }
