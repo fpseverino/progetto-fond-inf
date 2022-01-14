@@ -75,7 +75,7 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         printf("%s", " Inserisci codice fiscale: ");
         fflush(stdin);
         scanf("%16s", account.codiceFiscale);
-        inMaiuscolo(account.codiceFiscale, strlen(account.codiceFiscale));
+        inMaiuscolo(account.codiceFiscale);
 
         printf("%s", " Inserisci indirizzo di residenza: ");
         fflush(stdin);
@@ -377,8 +377,9 @@ void visualizzaElencoTransazioni() {
     fclose(pTxn);
 }
 
-void inMaiuscolo(char * string, int n) {
-    for (int i = 0; i < n; i++) {
+void inMaiuscolo(char * string) {
+    int lunghezzaString = strlen(string);
+    for (int i = 0; i < lunghezzaString; i++) {
         string[i] = toupper(string[i]);
     }
 }

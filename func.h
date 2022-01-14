@@ -42,7 +42,7 @@ void eliminaAccount(FILE *pFile, Data dataOdierna);
 void vediDettagliConto(FILE *pFile, Data dataOdierna);
 void visualizzaElencoTransazioni();
 
-void inMaiuscolo(char * string, int n); // funzione che riceve una stringa e la modifica rendendo tutti i caratteri maiuscoli
+void inMaiuscolo(char * string); // funzione che riceve una stringa e la modifica rendendo tutti i caratteri maiuscoli
 void stampaDettagliConto(DatiAccount account, Data dataOdierna);
 
 #endif
