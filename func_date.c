@@ -8,18 +8,18 @@
 #include "func_date.h"
 #include <stdbool.h>
 
-const int giorniMese[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+const int GIORNI_MESE[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 int anniPassati(Data primaData, Data secondaData) {
     // conta giorni dalla prima data all'anno zero
     int n1 = primaData.anno * 365 + primaData.giorno;
     for (int i = 0; i < primaData.mese - 1; i++) {
-        n1 += giorniMese[i];
+        n1 += GIORNI_MESE[i];
     }
     // conta giorni dalla seconda data all'anno zero
     int n2 = secondaData.anno * 365 + secondaData.giorno;
     for (int i = 0; i < secondaData.mese - 1; i++) {
-        n2 += giorniMese[i];
+        n2 += GIORNI_MESE[i];
     }
     // calcola gli anni fra le due date
     int anni = 0;
