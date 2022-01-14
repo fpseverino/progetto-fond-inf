@@ -69,7 +69,6 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
             scanf("%u%*c%u%*c%u", &account.dataNascita.giorno, &account.dataNascita.mese, &account.dataNascita.anno);
             if (!(checkDataNascita = controllaData(account.dataNascita))) {
                 puts("  ERRORE: Inserisci una data valida.");
-                continue;
             }
         }
 
@@ -261,7 +260,7 @@ void transazione(FILE *pFile, Data dataOdierna) {
                             break;
                     case 4: cambiaAccount(pFile, &account, dataOdierna);
                             break;
-                    default: /* scelta non valida */ puts("\nERRORE: Scegli un'opzione dal menù.\n");
+                    default: puts("\nERRORE: Scegli un'opzione dal menù.\n");
                             break;
                 }
             }

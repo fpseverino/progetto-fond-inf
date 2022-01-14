@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "func.h"
 #include "func_date.h"
 
@@ -42,17 +43,18 @@ int main() {
         puts("ERRORE: Il file non può essere aperto.");
     } else {
         puts("----------------------------------------------------------------");
-        printf("%s", "Ciao! Inserisci la data di oggi (gg/mm/aaaa): ");
         Data oggi;
-        scanf("%u%*c%u%*c%u", &oggi.giorno, &oggi.mese, &oggi.anno);
-        // controlla che la data sia valida
-        if (!controllaData(oggi)) {
-            puts(" ERRORE: Inserisci una data valida.\n");
-            return 0;
+        bool checkDataOggi = false;
+        while (!checkDataOggi) {
+            printf("%s", "Inserisci la data di oggi (gg/mm/aaaa): ");
+            fflush(stdin);
+            scanf("%u%*c%u%*c%u", &oggi.giorno, &oggi.mese, &oggi.anno);
+            if (!(checkDataOggi = controllaData(oggi))) {
+                puts(" ERRORE: Inserisci una data valida.");
+            }
         }
         puts("");
         unsigned int scelta;
-        // consenti all'utente di specificare l'azione
         while ((scelta = menuPrincipale()) != 8) {
             switch (scelta) {
                 case 1: aggiungiNuovoConto(pAccountFile, oggi);
@@ -69,7 +71,7 @@ int main() {
                         break;
                 case 7: visualizzaElencoTransazioni();
                         break;
-                default: /* scelta non valida */ puts("\nERRORE: Scegli un'opzione dal menù.\n");
+                default: puts("\nERRORE: Scegli un'opzione dal menù.\n");
                         break;
             }    
         }
