@@ -11,7 +11,7 @@
 #include "func_date.h"
 
 int main() {
-    FILE *pAccountFile; // puntatore al file accounts.dat
+    FILE *pAccountFile; // puntatore al file "accounts.dat"
 
     if ((pAccountFile = fopen("accounts.dat", "rb")) == NULL) /* il file non esiste e deve essere creato */ {
         // crea il file

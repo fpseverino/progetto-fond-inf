@@ -359,11 +359,11 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
 }
 
 void visualizzaElencoTransazioni() {
-    FILE *ptrTra;
-    if ((ptrTra = fopen("transazioni.txt","r")) == NULL) {
+    FILE *pTxn; // puntatore al file "transazioni.txt"
+    if ((pTxn = fopen("transazioni.txt","r")) == NULL) {
         puts("\nERRORE: Il file delle transazioni non esiste.\n");
     } else {
-        char c = fgetc(ptrTra);
+        char c = fgetc(pTxn);
         if (c == EOF) {
             puts("\nNon ci sono transazioni salvate.\n");
             return;
@@ -371,11 +371,11 @@ void visualizzaElencoTransazioni() {
         puts("\n---- ELENCO TRANSAZIONI --------");
         while (c != EOF) {
             printf("%c", c);
-            c = fgetc(ptrTra);
+            c = fgetc(pTxn);
         }
         puts("");
     }
-    fclose(ptrTra);
+    fclose(pTxn);
 }
 
 void inMaiuscolo(char * string, int n) {
