@@ -98,20 +98,26 @@ void bonifico(FILE *pFile, FILE *pTxn, DatiAccount * account, Data dataOdierna) 
             printf(" Inserisci importo: ");
             double importoBonifico;
             scanf("%lf",&importoBonifico);
-            account->saldo -= importoBonifico;
-            account2.saldo += importoBonifico;
+            if (importoBonifico < 0.0) {
+                puts("  ERRORE: Inserisci un valore positivo, transazione annullata.\n");
+            } else if (importoBonifico > account->saldo) {
+                puts("  ERRORE: Inserisci un valore minore del saldo totale, transazione annullata.\n");
+            } else {
+                account->saldo -= importoBonifico;
+                account2.saldo += importoBonifico;
 
-            // sposta il puntatore del file al record corretto nel file
-            fseek(pFile, (account->numeroConto - 1) * sizeof(DatiAccount), SEEK_SET);
-            fwrite(account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
-            // sposta il puntatore del file al record corretto nel file
-            fseek(pFile, (numeroAccount2 - 1) * sizeof(DatiAccount), SEEK_SET);
-            fwrite(&account2, sizeof(DatiAccount), 1, pFile); // aggiornamento record
+                // sposta il puntatore del file al record corretto nel file
+                fseek(pFile, (account->numeroConto - 1) * sizeof(DatiAccount), SEEK_SET);
+                fwrite(account, sizeof(DatiAccount), 1, pFile); // aggiornamento record
+                // sposta il puntatore del file al record corretto nel file
+                fseek(pFile, (numeroAccount2 - 1) * sizeof(DatiAccount), SEEK_SET);
+                fwrite(&account2, sizeof(DatiAccount), 1, pFile); // aggiornamento record
 
-            fprintf(pTxn, " Tipo di transazione: BONIFICO\n  Dal conto #%u\n  Al conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account->numeroConto, account2.numeroConto, importoBonifico, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
-            fprintf(pTxn, "--------------------------------\n");
+                fprintf(pTxn, " Tipo di transazione: BONIFICO\n  Dal conto #%u\n  Al conto #%u\n  Importo: %.2f\n  Data: %u/%u/%u\n", account->numeroConto, account2.numeroConto, importoBonifico, dataOdierna.giorno, dataOdierna.mese, dataOdierna.anno);
+                fprintf(pTxn, "--------------------------------\n");
 
-            printf("\nOperazione eseguita con successo.\n Saldo dell'account #%u: %.2lf\n\n", account->numeroConto, account->saldo);
+                printf("\nOperazione eseguita con successo.\n Saldo dell'account #%u: %.2lf\n\n", account->numeroConto, account->saldo);
+            }
         }
     } else puts("\nE' possibile effettuare bonifici solo con conti correnti.\n");
 }

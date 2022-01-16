@@ -90,11 +90,11 @@ void aggiungiNuovoConto(FILE *pFile, Data dataOdierna) {
         scanf("%lf", &account.saldo);
 
         printf("%s", " Inserisci il tipo di conto:\n"
-            "  1 - corrente         (interessi: 0%)\n"
-            "  2 - deposito         (interessi: 1% all'anno)\n"
-            "  3 - fisso per 1 anno (interessi: 2% all'anno)\n"
-            "  4 - fisso per 2 anni (interessi: 2,5% all'anno)\n"
-            "  5 - fisso per 3 anni (interessi: 3% all'anno)\n");
+            "  1 - corrente          (interessi: 0)             (deposito, prelievo, bonifico)\n"
+            "  2 - deposito          (interessi: 1% all'anno)   (deposito, prelievo)\n"
+            "  3 - fisso per 1 anno  (interessi: 2% all'anno)   (deposito, prelievo dopo un anno)\n"
+            "  4 - fisso per 2 anni  (interessi: 2,5% all'anno) (deposito, prelievo dopo due anni)\n"
+            "  5 - fisso per 3 anni  (interessi: 3% all'anno)   (deposito, prelievo dopo tre anni)\n");
         TIPO_CONTO temp;
         bool checkTipoConto = false;
         while (!checkTipoConto) {
