@@ -8,7 +8,7 @@
 #include "func_date.h"
 #include <stdbool.h>
 
-const int GIORNI_MESE[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+static const int GIORNI_MESE[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 int anniPassati(Data primaData, Data secondaData) {
     // conta giorni dalla prima data all'anno zero
