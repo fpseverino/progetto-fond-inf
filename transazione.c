@@ -18,6 +18,7 @@ unsigned int menuTransazioni(unsigned int numeroAccount) {
         " 4 - Cambia account\n"
         " 5 - Uscita\n? ", numeroAccount, numeroAccount, numeroAccount);
     unsigned int sceltaMenu;
+    fflush(stdin);
     scanf("%u", &sceltaMenu);
     return sceltaMenu;
 }

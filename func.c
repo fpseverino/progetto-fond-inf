@@ -24,6 +24,7 @@ unsigned int menuPrincipale() {
         " 7 - Visualizza elenco transazioni\n"
         " 8 - Uscita\n? ");
     unsigned int sceltaMenu;
+    fflush(stdin);
     scanf("%u", &sceltaMenu);
     return sceltaMenu;
 }
