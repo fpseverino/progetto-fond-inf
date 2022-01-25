@@ -334,8 +334,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
     unsigned int numeroAccount;
     scanf("%u", &numeroAccount);
 
-    // sposta il puntatore del file al record corretto nel file
-    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET);
+    fseek(pFile, (numeroAccount - 1) * sizeof(DatiAccount), SEEK_SET); // sposta il puntatore del file al record corretto nel file
     // crea DatiAccount con informazioni predefinite
     DatiAccount account = {
         "",
@@ -349,8 +348,7 @@ void vediDettagliConto(FILE *pFile, Data dataOdierna) {
         {0, 0, 0},
         0.0
     };
-    // leggi il record dal file
-    fread(&account, sizeof(DatiAccount), 1, pFile);
+    fread(&account, sizeof(DatiAccount), 1, pFile); // leggi il record dal file
 
     if (account.numeroConto == 0) {
         printf(" L'account #%u non contiene informazioni.\n\n", numeroAccount);
