@@ -1,7 +1,7 @@
 # progetto-fond-inf
-## Corso di Fondamenti di Informatica UNIKORE A.A. 2021/2022 - Progetto di fine semestre
+Corso di Fondamenti di Informatica UNIKORE A.A. 2021/2022 - Progetto di fine semestre
 
-### **Progetto #6 Sistema di gestione di conti bancari**
+## **Progetto #6 Sistema di gestione di conti bancari**
 
 Questo progetto mira a creare un nuovo account, aggiornare le informazioni di un account esistente, visualizzare e gestire le transazioni, controllare i dettagli di un account esistente, rimuovere l'account esistente e visualizzare l'elenco dei clienti.
 
